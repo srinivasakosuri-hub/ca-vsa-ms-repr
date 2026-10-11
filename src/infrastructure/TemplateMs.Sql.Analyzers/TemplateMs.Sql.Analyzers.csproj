@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+	<TargetFramework>netstandard2.0</TargetFramework>
+	<LangVersion>latest</LangVersion>
+	<Nullable>enable</Nullable>
+	<ImplicitUsings>disable</ImplicitUsings>
+	<!-- Roslyn analyzer projects must not emit their lib assembly into the referencing project -->
+	<IncludeBuildOutput>false</IncludeBuildOutput>
+	<DevelopmentDependency>true</DevelopmentDependency>
+	<GenerateDocumentationFile>true</GenerateDocumentationFile>
+	<!-- RS2007/RS2008 release-tracking rules only apply to NuGet-published analyzers; suppress for in-solution use -->
+	<EnforceExtendedAnalyzerRules>false</EnforceExtendedAnalyzerRules>
+	<NoWarn>$(NoWarn);RS2007;RS2008</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+	<!-- Roslyn analysis APIs – must be PrivateAssets so they don't flow to referencing projects -->
+	<PackageReference Include="Microsoft.CodeAnalysis.CSharp" PrivateAssets="all" />
+  </ItemGroup>
+
+</Project>

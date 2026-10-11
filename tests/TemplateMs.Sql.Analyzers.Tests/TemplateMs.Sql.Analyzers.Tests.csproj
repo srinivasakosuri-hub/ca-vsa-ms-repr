@@ -1,0 +1,33 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+	<TargetFramework>net10.0</TargetFramework>
+	<LangVersion>latest</LangVersion>
+	<Nullable>enable</Nullable>
+	<ImplicitUsings>enable</ImplicitUsings>
+	<IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+	<PackageReference Include="Microsoft.NET.Test.Sdk" />
+	<PackageReference Include="xunit" />
+	<PackageReference Include="xunit.runner.visualstudio">
+	  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+	  <PrivateAssets>all</PrivateAssets>
+	</PackageReference>
+	<PackageReference Include="FluentAssertions" />
+	<!-- Roslyn testing infrastructure -->
+	<PackageReference Include="Microsoft.CodeAnalysis.CSharp" />
+	<PackageReference Include="Microsoft.CodeAnalysis.Analyzers">
+	  <PrivateAssets>all</PrivateAssets>
+	  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+	</PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+	<!-- Reference the analyzer project as a normal compile-time assembly so tests can instantiate analyzers directly -->
+	<ProjectReference Include="..\..\src\infrastructure\TemplateMs.Sql.Analyzers\TemplateMs.Sql.Analyzers.csproj"
+					  ReferenceOutputAssembly="true" />
+  </ItemGroup>
+
+</Project>

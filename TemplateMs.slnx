@@ -1,0 +1,28 @@
+<Solution>
+  <Folder Name="/src/" />
+  <Folder Name="/src/core/">
+    <Project Path="src/core/TemplateMs.Application/TemplateMs.Application.csproj" />
+    <Project Path="src/core/TemplateMs.Domain/TemplateMs.Domain.csproj" />
+  </Folder>
+  <Folder Name="/src/infrastructure/">
+    <Project Path="src/infrastructure/TemplateMs.Database/TemplateMs.Database.sqlproj" Id="1d9bf3ce-25d8-47a8-bdd8-1165a48e5177">
+      <Build />
+      <Deploy />
+    </Project>
+    <Project Path="src/infrastructure/TemplateMs.Infrastructure/TemplateMs.Infrastructure.csproj" />
+    <Project Path="src/infrastructure/TemplateMs.Sql.Analyzers/TemplateMs.Sql.Analyzers.csproj" />
+    <Project Path="src/infrastructure/TemplateMs.Sql/TemplateMs.Sql.csproj" />
+  </Folder>
+  <Folder Name="/src/presentation/">
+    <Project Path="src/presentation/TemplateMs.Api/TemplateMs.Api.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/TemplateMs.Api.Tests/TemplateMs.Api.Tests.csproj" />
+    <Project Path="tests/TemplateMs.Application.Tests/TemplateMs.Application.Tests.csproj" />
+    <Project Path="tests/TemplateMs.Architecture.Tests/TemplateMs.Architecture.Tests.csproj" />
+    <Project Path="tests/TemplateMs.Domain.Tests/TemplateMs.Domain.Tests.csproj" />
+    <Project Path="tests/TemplateMs.Infrastructure.Tests/TemplateMs.Infrastructure.Tests.csproj" />
+    <Project Path="tests/TemplateMs.IntegrationTests/TemplateMs.IntegrationTests.csproj" />
+    <Project Path="tests/TemplateMs.Sql.Analyzers.Tests/TemplateMs.Sql.Analyzers.Tests.csproj" />
+  </Folder>
+</Solution>

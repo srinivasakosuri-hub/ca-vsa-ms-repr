@@ -1,0 +1,1 @@
+**/*Tests.cs,**/*Test.cs,**/Program.cs,**/*.sh,**/*.txt,**/*.md,**/*.gitignore,**/*.gitattributes,**/TestResults/**,**/bin/**,**/obj/**,**/*.sln,**/*.json,coverage.xml,Checkmarx/Reports/**,**/Docker*,**/Migrations/**,**/*Migration*.cs,**/GlobalUsings.cs,**/*AssemblyInfo*.cs,**/*.Sql/**

@@ -1,0 +1,1824 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>TemplateMs — Complete Developer Documentation</title>
+<style>
+  :root{
+    --bg:#0f1117;--surface:#161b22;--surface2:#21262d;--surface3:#30363d;
+    --border:#30363d;--text:#e6edf3;--muted:#8b949e;--accent:#58a6ff;
+    --accent2:#79c0ff;--green:#3fb950;--yellow:#d29922;--red:#f85149;
+    --purple:#bc8cff;--orange:#ffa657;--teal:#39d353;
+    --code-bg:#161b22;--sidebar-w:280px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--text);line-height:1.7;display:flex;min-height:100vh}
+
+  /* ── Sidebar ── */
+  nav#sidebar{
+    position:fixed;top:0;left:0;bottom:0;width:var(--sidebar-w);
+    background:var(--surface);border-right:1px solid var(--border);
+    overflow-y:auto;padding:0 0 2rem;z-index:100;
+  }
+  nav#sidebar .logo{
+    padding:1.2rem 1.4rem;border-bottom:1px solid var(--border);
+    font-size:.95rem;font-weight:700;color:var(--accent);letter-spacing:.03em;
+  }
+  nav#sidebar ul{list-style:none}
+  nav#sidebar ul li a{
+    display:block;padding:.38rem 1.4rem;font-size:.82rem;color:var(--muted);
+    text-decoration:none;border-left:3px solid transparent;transition:all .15s;
+  }
+  nav#sidebar ul li a:hover{color:var(--text);border-left-color:var(--surface3)}
+  nav#sidebar ul li a.active{color:var(--accent);border-left-color:var(--accent);background:rgba(88,166,255,.08)}
+  nav#sidebar .section-label{
+    padding:.9rem 1.4rem .3rem;font-size:.68rem;text-transform:uppercase;
+    letter-spacing:.1em;color:var(--muted);font-weight:600;
+  }
+
+  /* ── Main ── */
+  main{margin-left:var(--sidebar-w);flex:1;max-width:1060px;padding:3rem 3.5rem}
+
+  /* ── Typography ── */
+  h1{font-size:2.2rem;font-weight:800;letter-spacing:-.03em;color:var(--text);margin-bottom:.5rem}
+  h2{font-size:1.55rem;font-weight:700;color:var(--text);margin:3rem 0 .9rem;padding-top:3rem;border-top:1px solid var(--border)}
+  h3{font-size:1.15rem;font-weight:700;color:var(--accent2);margin:2rem 0 .6rem}
+  h4{font-size:.95rem;font-weight:700;color:var(--orange);margin:1.4rem 0 .4rem;text-transform:uppercase;letter-spacing:.04em}
+  p{margin:.6rem 0;color:var(--text)}
+  a{color:var(--accent);text-decoration:none}
+  a:hover{text-decoration:underline}
+  ul,ol{padding-left:1.4rem;margin:.5rem 0}
+  li{margin:.25rem 0}
+  strong{color:var(--text);font-weight:700}
+  em{color:var(--yellow);font-style:normal}
+
+  /* ── Hero ── */
+  .hero{
+    background:linear-gradient(135deg,rgba(88,166,255,.12),rgba(188,140,255,.08));
+    border:1px solid rgba(88,166,255,.25);border-radius:12px;
+    padding:2.2rem 2.4rem;margin-bottom:2rem;
+  }
+  .hero h1{margin-bottom:.4rem}
+  .hero p{color:var(--muted);font-size:1.05rem}
+  .badge-row{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:1rem}
+  .badge{
+    display:inline-flex;align-items:center;gap:.35rem;
+    padding:.25rem .7rem;border-radius:20px;font-size:.75rem;font-weight:600;
+    background:var(--surface2);border:1px solid var(--border);
+  }
+  .badge.green{color:var(--green);border-color:rgba(63,185,80,.4)}
+  .badge.blue{color:var(--accent);border-color:rgba(88,166,255,.4)}
+  .badge.purple{color:var(--purple);border-color:rgba(188,140,255,.4)}
+  .badge.orange{color:var(--orange);border-color:rgba(255,166,87,.4)}
+
+  /* ── Code ── */
+  pre{
+    background:var(--code-bg);border:1px solid var(--border);border-radius:8px;
+    overflow-x:auto;padding:1.2rem 1.4rem;margin:.8rem 0 1.4rem;
+    font-size:.82rem;line-height:1.65;
+  }
+  code{font-family:'Cascadia Code','Fira Code','Consolas',monospace}
+  pre code{color:#e6edf3}
+  :not(pre)>code{
+    background:var(--surface2);border:1px solid var(--border);border-radius:4px;
+    padding:.1rem .4rem;font-size:.82em;color:var(--orange);
+  }
+  /* syntax-ish tints */
+  .k{color:#ff7b72}   /* keyword */
+  .t{color:#79c0ff}   /* type */
+  .s{color:#a5d6ff}   /* string */
+  .c{color:#8b949e}   /* comment */
+  .m{color:#ffa657}   /* method / number */
+  .p{color:#e6edf3}   /* punctuation */
+  .a{color:#3fb950}   /* attribute / annotation */
+  .i{color:#bc8cff}   /* interface */
+
+  /* ── Callout boxes ── */
+  .callout{
+    display:flex;gap:1rem;border-radius:8px;padding:1rem 1.2rem;margin:1rem 0;
+    border-left:4px solid;
+  }
+  .callout.info{background:rgba(88,166,255,.1);border-color:var(--accent)}
+  .callout.warn{background:rgba(210,153,34,.1);border-color:var(--yellow)}
+  .callout.danger{background:rgba(248,81,73,.1);border-color:var(--red)}
+  .callout.tip{background:rgba(63,185,80,.1);border-color:var(--green)}
+  .callout-icon{font-size:1.1rem;line-height:1.7;flex-shrink:0}
+  .callout p{margin:0}
+
+  /* ── Tables ── */
+  .table-wrap{overflow-x:auto;margin:1rem 0}
+  table{border-collapse:collapse;width:100%;font-size:.85rem}
+  th{background:var(--surface2);color:var(--text);font-weight:700;padding:.55rem .9rem;text-align:left;border:1px solid var(--border)}
+  td{padding:.48rem .9rem;border:1px solid var(--border);color:var(--muted);vertical-align:top}
+  td code{font-size:.8rem}
+  tr:hover td{background:rgba(255,255,255,.025)}
+
+  /* ── Flow diagrams ── */
+  .flow{
+    background:var(--surface);border:1px solid var(--border);border-radius:8px;
+    padding:1.5rem 1.8rem;font-family:'Cascadia Code','Fira Code',monospace;
+    font-size:.8rem;line-height:1.9;overflow-x:auto;white-space:pre;margin:1rem 0 1.4rem;
+    color:var(--muted);
+  }
+  .flow .hi{color:var(--accent)}
+  .flow .hi2{color:var(--green)}
+  .flow .hi3{color:var(--orange)}
+  .flow .hi4{color:var(--purple)}
+
+  /* ── Section splitter ── */
+  .section-divider{height:1px;background:var(--border);margin:1rem 0}
+
+  /* ── Card grid ── */
+  .card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1rem;margin:1rem 0}
+  .card{
+    background:var(--surface);border:1px solid var(--border);border-radius:8px;
+    padding:1.2rem 1.4rem;transition:border-color .2s;
+  }
+  .card:hover{border-color:var(--accent)}
+  .card h4{margin:0 0 .4rem;font-size:.9rem;color:var(--accent2)}
+  .card p{font-size:.83rem;color:var(--muted);margin:0}
+
+  /* ── Step list ── */
+  .steps{counter-reset:step;padding:0;list-style:none;margin:1rem 0}
+  .steps li{
+    counter-increment:step;display:flex;gap:1rem;margin-bottom:1.2rem;
+    padding:.8rem 1rem;background:var(--surface);border:1px solid var(--border);border-radius:8px;
+  }
+  .steps li::before{
+    content:counter(step);width:1.6rem;height:1.6rem;min-width:1.6rem;
+    background:var(--accent);color:#0f1117;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.78rem;
+  }
+  .steps li .step-body{flex:1}
+  .steps li .step-title{font-weight:700;font-size:.9rem;color:var(--text);display:block;margin-bottom:.25rem}
+  .steps li p{margin:0;font-size:.83rem;color:var(--muted)}
+
+  /* ── Pill ── */
+  .pill{
+    display:inline-block;padding:.1rem .55rem;border-radius:20px;font-size:.72rem;
+    font-weight:700;margin:0 .1rem;
+  }
+  .pill.cmd{background:rgba(88,166,255,.15);color:var(--accent)}
+  .pill.qry{background:rgba(63,185,80,.15);color:var(--green)}
+  .pill.evt{background:rgba(188,140,255,.15);color:var(--purple)}
+  .pill.inf{background:rgba(255,166,87,.15);color:var(--orange)}
+  .pill.dom{background:rgba(57,211,83,.15);color:var(--teal)}
+
+  /* ── Breadcrumb / page TOC ── */
+  .page-toc{
+    float:right;background:var(--surface);border:1px solid var(--border);border-radius:8px;
+    padding:.8rem 1.1rem;margin:0 0 1rem 2rem;font-size:.78rem;min-width:160px;
+  }
+  .page-toc h5{color:var(--muted);font-size:.7rem;text-transform:uppercase;letter-spacing:.08em;margin-bottom:.4rem}
+  .page-toc a{display:block;color:var(--muted);padding:.18rem 0}
+  .page-toc a:hover{color:var(--accent)}
+
+  /* ── Responsive ── */
+  @media(max-width:768px){
+    nav#sidebar{display:none}
+    main{margin-left:0;padding:1.5rem}
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════ SIDEBAR ═══════════════════════════ -->
+<nav id="sidebar">
+  <div class="logo">⚡ TemplateMs Docs</div>
+  <div class="section-label">Overview</div>
+  <ul>
+    <li><a href="#overview">What is TemplateMs?</a></li>
+    <li><a href="#architecture">Architecture Philosophy</a></li>
+    <li><a href="#solution-map">Solution Map</a></li>
+    <li><a href="#dependency-rules">Dependency Rules</a></li>
+  </ul>
+  <div class="section-label">Domain Layer</div>
+  <ul>
+    <li><a href="#domain-intro">Domain Overview</a></li>
+    <li><a href="#entity-chain">Entity Hierarchy</a></li>
+    <li><a href="#aggregate-root">AggregateRoot</a></li>
+    <li><a href="#order-aggregate">Order Aggregate</a></li>
+    <li><a href="#domain-events">Domain Events</a></li>
+    <li><a href="#domain-exceptions">Domain Exceptions</a></li>
+  </ul>
+  <div class="section-label">Application Layer</div>
+  <ul>
+    <li><a href="#application-intro">Application Overview</a></li>
+    <li><a href="#vertical-slices">Vertical Slices</a></li>
+    <li><a href="#commands">Commands</a></li>
+    <li><a href="#queries">Queries</a></li>
+    <li><a href="#handlers">Handlers (WolverineFX)</a></li>
+    <li><a href="#validators">Validators</a></li>
+    <li><a href="#behaviors">Middleware Behaviors</a></li>
+    <li><a href="#dtos">DTOs</a></li>
+    <li><a href="#mapper">Manual Mapper</a></li>
+    <li><a href="#app-interfaces">Interfaces</a></li>
+    <li><a href="#integration-events">Integration Events</a></li>
+  </ul>
+  <div class="section-label">Infrastructure Layer</div>
+  <ul>
+    <li><a href="#infra-intro">Infrastructure Overview</a></li>
+    <li><a href="#connection-factories">Connection Factories</a></li>
+    <li><a href="#uow">Unit of Work</a></li>
+    <li><a href="#repositories">Repositories</a></li>
+    <li><a href="#wolverine-infra">WolverineFX Wiring</a></li>
+    <li><a href="#outbox">Outbox Pattern</a></li>
+    <li><a href="#activemq">ActiveMQ Publisher</a></li>
+    <li><a href="#background-services">Background Services</a></li>
+    <li><a href="#current-user">CurrentUserProvider</a></li>
+  </ul>
+  <div class="section-label">SQL Layer</div>
+  <ul>
+    <li><a href="#sql-intro">TemplateMs.Sql</a></li>
+    <li><a href="#sql-constants">SQL Constants</a></li>
+    <li><a href="#sql-analyzers">Roslyn Analyzers</a></li>
+  </ul>
+  <div class="section-label">API Layer</div>
+  <ul>
+    <li><a href="#api-intro">API Overview</a></li>
+    <li><a href="#program">Program.cs Bootstrap</a></li>
+    <li><a href="#controllers">Controllers</a></li>
+    <li><a href="#middleware">Middleware</a></li>
+    <li><a href="#di">DI Extensions</a></li>
+    <li><a href="#error-handling">Error Handling</a></li>
+    <li><a href="#api-models">Request / Response Models</a></li>
+  </ul>
+  <div class="section-label">Full Flows</div>
+  <ul>
+    <li><a href="#flow-create">Create Order End-to-End</a></li>
+    <li><a href="#flow-event">Domain Event Pipeline</a></li>
+    <li><a href="#flow-query">Query Flow</a></li>
+    <li><a href="#flow-error">Error Handling Flow</a></li>
+  </ul>
+  <div class="section-label">Tests</div>
+  <ul>
+    <li><a href="#test-overview">Test Strategy</a></li>
+    <li><a href="#arch-tests">Architecture Tests</a></li>
+    <li><a href="#analyzer-tests">Analyzer Tests</a></li>
+    <li><a href="#integration-tests">Integration Tests</a></li>
+  </ul>
+  <div class="section-label">Reference</div>
+  <ul>
+    <li><a href="#config">Configuration</a></li>
+    <li><a href="#database">Database Schema</a></li>
+    <li><a href="#new-feature">Adding a Feature</a></li>
+    <li><a href="#standards">Engineering Standards</a></li>
+  </ul>
+</nav>
+
+<!-- ═══════════════════════════ MAIN ═══════════════════════════ -->
+<main>
+
+<!-- ─── HERO ─── -->
+<section id="overview">
+<div class="hero">
+  <h1>TemplateMs</h1>
+  <p>A production-grade .NET 10 microservice template — Clean Architecture + Vertical Slice Architecture + Domain-Driven Design + WolverineFX</p>
+  <div class="badge-row">
+    <span class="badge green">● .NET 10</span>
+    <span class="badge blue">● WolverineFX</span>
+    <span class="badge orange">● Dapper</span>
+    <span class="badge purple">● ActiveMQ</span>
+    <span class="badge green">● Scalar Docs</span>
+    <span class="badge blue">● Testcontainers</span>
+    <span class="badge orange">● Roslyn Analyzers</span>
+    <span class="badge purple">● 63 Architecture Tests</span>
+  </div>
+</div>
+
+<h3>What problem does this solve?</h3>
+<p>Most microservice templates force you to pick between Clean Architecture (horizontal layers) and Vertical Slice Architecture (feature folders). TemplateMs uses <strong>both simultaneously</strong>:</p>
+<ul>
+  <li><strong>Clean Architecture</strong> draws hard rings around Domain → Application → Infrastructure → Api. Nothing in an inner ring ever imports from an outer ring. Architecture tests enforce this at every build.</li>
+  <li><strong>Vertical Slice Architecture</strong> organises code <em>inside</em> the Application ring by feature, not by type. Every file related to "create an order" lives in <code>Features/Order/Commands/</code> — command, handler, validator, DTO, mapper, interfaces all together.</li>
+  <li><strong>DDD</strong> provides the conceptual model: aggregates that protect invariants, domain events for loose coupling, a repository abstraction for persistence ignorance.</li>
+</ul>
+
+<div class="callout info">
+  <div class="callout-icon">💡</div>
+  <p>The practical result: you find a feature by folder (vertical slice) and trust that it never corrupts another layer (clean architecture). Architecture tests make violations visible immediately — the build simply fails.</p>
+</div>
+</section>
+
+<!-- ─── ARCHITECTURE ─── -->
+<section id="architecture">
+<h2>Architecture Philosophy</h2>
+
+<h3>The Four Rings</h3>
+<div class="flow">
+<span class="hi">┌─────────────────────────────────────────────────────────────┐</span>
+<span class="hi">│                      TemplateMs.Api                         │</span>  HTTP / Scalar / Middleware
+<span class="hi">│</span>  Controllers · RequestModels · ResponseModels · DI wiring   <span class="hi">│</span>
+<span class="hi">└──────────────────────────┬──────────────────────────────────┘</span>
+                           │  IMessageBus (WolverineFX)
+<span class="hi2">┌──────────────────────────▼──────────────────────────────────┐</span>
+<span class="hi2">│                   TemplateMs.Application                    │</span>  Use-cases
+<span class="hi2">│</span>  Features/Order/Commands · Queries · DTOs · Events          <span class="hi2">│</span>
+<span class="hi2">│</span>  Behaviors: Logging · Validation · Transaction              <span class="hi2">│</span>
+<span class="hi2">└──────────────┬──────────────────────────┬───────────────────┘</span>
+               │ references               │ implements (via DI)
+<span class="hi3">┌──────────────▼───────────┐  ┌──────────▼────────────────────┐</span>
+<span class="hi3">│     TemplateMs.Domain    │  │   TemplateMs.Infrastructure   │</span>
+<span class="hi3">│</span> Aggregates · Entities   <span class="hi3">│  │</span> Dapper repos · UoW · AMQ     <span class="hi3">│</span>
+<span class="hi3">│</span> Events · Exceptions     <span class="hi3">│  │</span> Outbox · Background services <span class="hi3">│</span>
+<span class="hi3">└──────────────────────────┘  └──────────────┬───────────────┘</span>
+                                             │ SQL constants only
+                              <span class="hi4">┌──────────────▼────────────────┐</span>
+                              <span class="hi4">│       TemplateMs.Sql          │</span>
+                              <span class="hi4">│</span>  public const string only     <span class="hi4">│</span>
+                              <span class="hi4">│</span>  No logic · No deps           <span class="hi4">│</span>
+                              <span class="hi4">└───────────────────────────────┘</span>
+</div>
+
+<h3>Why WolverineFX instead of MediatR?</h3>
+<p>MediatR is an in-process mediator — it dispatches messages and that's it. WolverineFX is a <strong>full messaging framework</strong> that happens to support in-process dispatch as well:</p>
+<div class="table-wrap">
+<table>
+  <tr><th>Feature</th><th>MediatR</th><th>WolverineFX</th></tr>
+  <tr><td>In-process dispatch</td><td>✓</td><td>✓</td></tr>
+  <tr><td>Convention-based handlers (no interface)</td><td>✗</td><td>✓</td></tr>
+  <tr><td>Middleware pipeline (Before/After/OnException)</td><td>Pipeline behaviours</td><td>Native, richer</td></tr>
+  <tr><td>SQL Server durable inbox/outbox</td><td>✗</td><td>✓ via WolverineFx.SqlServer</td></tr>
+  <tr><td>External transport (AMQ, Rabbit, etc.)</td><td>✗</td><td>✓</td></tr>
+  <tr><td>Handler discovery</td><td>Requires <code>IRequestHandler&lt;T&gt;</code></td><td>Class ending in "Handler" + "Handle" method</td></tr>
+</table>
+</div>
+
+<h3>Why Dapper instead of Entity Framework?</h3>
+<p>Dapper makes SQL explicit and reviewable. Every SQL string lives in <code>TemplateMs.Sql</code> as a <code>const string</code>. You can read, diff, and review the exact SQL that runs in production. Roslyn build analyzers prevent hardcoded database names or schema names from ever creeping in, keeping SQL environment-agnostic.</p>
+</section>
+
+<!-- ─── SOLUTION MAP ─── -->
+<section id="solution-map">
+<h2>Solution Map</h2>
+<pre><code>wolverine2/
+<span class="k">├── src/</span>
+<span class="k">│   ├── core/</span>
+<span class="t">│   │   ├── TemplateMs.Domain/</span>          <span class="c">← DDD domain model. Zero dependencies.</span>
+<span class="t">│   │   └── TemplateMs.Application/</span>     <span class="c">← Use-cases, vertical slices. References Domain only.</span>
+<span class="k">│   ├── infrastructure/</span>
+<span class="t">│   │   ├── TemplateMs.Infrastructure/</span>  <span class="c">← Dapper, AMQ, outbox, UoW. References App+Domain+Sql.</span>
+<span class="t">│   │   ├── TemplateMs.Sql/</span>             <span class="c">← SQL string constants. Zero dependencies.</span>
+<span class="t">│   │   ├── TemplateMs.Sql.Analyzers/</span>   <span class="c">← Roslyn analyzers (netstandard2.0). Wired into Sql project.</span>
+<span class="t">│   │   └── TemplateMs.Database/</span>        <span class="c">← SSDT DDL scripts. Not a C# project.</span>
+<span class="k">│   └── presentation/</span>
+<span class="t">│       └── TemplateMs.Api/</span>             <span class="c">← ASP.NET Core 10. References App+Domain (Infra via DI only).</span>
+<span class="k">├── tests/</span>
+<span class="t">│   ├── TemplateMs.Domain.Tests/</span>        <span class="c">← Unit tests. Zero infrastructure, zero mocks.</span>
+<span class="t">│   ├── TemplateMs.Application.Tests/</span>   <span class="c">← Unit tests. Mocks via NSubstitute.</span>
+<span class="t">│   ├── TemplateMs.Infrastructure.Tests/</span><span class="c">← Unit tests for Infrastructure-specific logic.</span>
+<span class="t">│   ├── TemplateMs.Api.Tests/</span>           <span class="c">← API layer unit tests.</span>
+<span class="t">│   ├── TemplateMs.Architecture.Tests/</span>  <span class="c">← 63 NetArchTest dependency-rule tests.</span>
+<span class="t">│   ├── TemplateMs.Sql.Analyzers.Tests/</span> <span class="c">← 29 Roslyn analyzer in-process tests.</span>
+<span class="t">│   └── TemplateMs.IntegrationTests/</span>    <span class="c">← Testcontainers SQL Server. Shared fixture.</span>
+<span class="k">├── Directory.Build.props</span>               <span class="c">← TreatWarningsAsErrors=true, EnableNETAnalyzers=true</span>
+<span class="k">├── Dockerfile</span>
+<span class="k">└── TemplateMs.slnx</span></code></pre>
+
+<div class="callout info">
+  <div class="callout-icon">📁</div>
+  <p>The <code>src/core/</code> grouping signals that Domain and Application are the heart of the system. The <code>src/infrastructure/</code> and <code>src/presentation/</code> groupings are implementation details that could theoretically be replaced without touching the core.</p>
+</div>
+</section>
+
+<!-- ─── DEPENDENCY RULES ─── -->
+<section id="dependency-rules">
+<h2>Dependency Rules</h2>
+<p>These rules are enforced by 11 tests in <code>TemplateMs.Architecture.Tests</code>. Any violation causes a build failure.</p>
+<div class="table-wrap">
+<table>
+  <tr><th>Assembly</th><th>May reference</th><th>Must NEVER reference</th></tr>
+  <tr><td><code>TemplateMs.Domain</code></td><td><em>(nothing)</em></td><td>Application · Infrastructure · Api · Sql</td></tr>
+  <tr><td><code>TemplateMs.Application</code></td><td>Domain</td><td>Infrastructure · Api · Sql</td></tr>
+  <tr><td><code>TemplateMs.Infrastructure</code></td><td>Application · Domain · Sql</td><td>Api</td></tr>
+  <tr><td><code>TemplateMs.Sql</code></td><td><em>(nothing)</em></td><td>Domain · Application · Infrastructure · Api</td></tr>
+  <tr><td><code>TemplateMs.Api</code></td><td>Application · Domain · Infrastructure (DI only)</td><td>Infrastructure concrete types</td></tr>
+</table>
+</div>
+
+<div class="callout warn">
+  <div class="callout-icon">⚠️</div>
+  <p><strong>NetArchTest scans string literals too.</strong> A <code>const string = "TemplateMs.Api"</code> inside Infrastructure would trip the <code>InfrastructureDoesNotDependOnApi</code> test even though there is no compile-time reference. Always use generic names like <code>"TemplateMs"</code> for telemetry service names.</p>
+</div>
+
+<h3>Forbidden Libraries</h3>
+<div class="table-wrap">
+<table>
+  <tr><th>Library</th><th>Banned because</th><th>Use instead</th></tr>
+  <tr><td>MediatR</td><td>Replaced by WolverineFX</td><td><code>IMessageBus.InvokeAsync / PublishAsync</code></td></tr>
+  <tr><td>AutoMapper</td><td>Hides mapping logic, reflection overhead</td><td><code>OrderMapper</code> static class</td></tr>
+  <tr><td>Entity Framework Core</td><td>Replaced by Dapper</td><td>Repositories + SQL constants</td></tr>
+  <tr><td>System.Data.SqlClient</td><td>Legacy, superseded</td><td><code>Microsoft.Data.SqlClient</code></td></tr>
+  <tr><td>FluentValidation in Domain</td><td>Domain enforces invariants via exceptions</td><td><code>DomainException</code></td></tr>
+  <tr><td>Dapper in Domain / Application</td><td>Persistence is infrastructure concern</td><td>Repository interfaces + implementations</td></tr>
+</table>
+</div>
+</section>
+
+<!-- ═══════════════════════════ DOMAIN ═══════════════════════════ -->
+<section id="domain-intro">
+<h2>Domain Layer — TemplateMs.Domain</h2>
+<p>The innermost ring. <strong>Zero NuGet packages. Zero project references.</strong> Pure C# and the .NET BCL. The domain model captures the business vocabulary, rules, and behaviour of the Order system.</p>
+<p>Everything in this project is designed to be tested without any infrastructure at all — no database, no file system, no HTTP. Domain tests run entirely in memory.</p>
+</section>
+
+<section id="entity-chain">
+<h3>Entity Hierarchy — connecting the inheritance dots</h3>
+<pre><code><span class="t">BaseEntity</span>               <span class="c">// int Id, equality by identity</span>
+  └─ <span class="t">BaseAuditableEntity</span>  <span class="c">// + CreatedBy, CreatedAt, UpdatedBy, UpdatedAt</span>
+       └─ <span class="t">AggregateRoot</span>   <span class="c">// + domain event tracking</span>
+            └─ <span class="t">Order</span>      <span class="c">// sealed — the aggregate root for the Order context</span>
+       └─ <span class="t">OrderItem</span>       <span class="c">// sealed — child entity, owned by Order</span>
+       └─ <span class="t">OrderItemAttribute</span> <span class="c">// sealed — grandchild, owned by OrderItem</span></code></pre>
+
+<h4>BaseEntity</h4>
+<pre><code><span class="k">public abstract class</span> <span class="t">BaseEntity</span> : <span class="i">IEntity</span>
+{
+    <span class="k">public int</span> <span class="m">Id</span> { <span class="k">get</span>; <span class="k">set</span>; }
+
+    <span class="c">// Equality is by Id — two Order instances with Id=5 are the same order.</span>
+    <span class="k">public override bool</span> <span class="m">Equals</span>(<span class="t">object</span>? obj) { ... }
+    <span class="k">public override int</span>  <span class="m">GetHashCode</span>() => <span class="m">Id</span>.<span class="m">GetHashCode</span>();
+    <span class="k">public static bool operator</span> ==(<span class="t">BaseEntity</span>? left, <span class="t">BaseEntity</span>? right) ...
+}</code></pre>
+<p>Entity equality is by <em>identity</em> (the Id) not by value. Two <code>Order</code> objects with the same Id represent the same order, regardless of which properties are set.</p>
+
+<h4>BaseAuditableEntity</h4>
+<pre><code><span class="k">public abstract class</span> <span class="t">BaseAuditableEntity</span> : <span class="t">BaseEntity</span>, <span class="i">IAuditableEntity</span>
+{
+    <span class="k">public</span> <span class="t">Guid</span> CreatedBy   { <span class="k">get</span>; <span class="k">set</span>; }
+    <span class="k">public</span> <span class="t">DateTime</span> CreatedAt { <span class="k">get</span>; <span class="k">set</span>; }
+    <span class="k">public</span> <span class="t">Guid</span> UpdatedBy   { <span class="k">get</span>; <span class="k">set</span>; }
+    <span class="k">public</span> <span class="t">DateTime</span> UpdatedAt { <span class="k">get</span>; <span class="k">set</span>; }
+
+    <span class="c">// Helper — stamps both Created and Updated fields at once</span>
+    <span class="k">public void</span> <span class="m">MarkAsCreated</span>(<span class="t">Guid</span> userId, <span class="t">DateTime</span>? timestamp = <span class="k">null</span>) ...
+    <span class="k">public void</span> <span class="m">MarkAsUpdated</span>(<span class="t">Guid</span> userId, <span class="t">DateTime</span>? timestamp = <span class="k">null</span>) ...
+}</code></pre>
+<p>The audit fields use <code>set</code> (not <code>private set</code>) specifically to allow <strong>Dapper</strong> to hydrate them when mapping SQL results. This is the deliberate exception to the "no public setters" rule — Dapper needs column name → property name mapping to work.</p>
+</section>
+
+<section id="aggregate-root">
+<h3>AggregateRoot — domain event tracking</h3>
+<pre><code><span class="k">public abstract class</span> <span class="t">AggregateRoot</span> : <span class="t">BaseAuditableEntity</span>
+{
+    <span class="k">private readonly</span> <span class="t">List</span>&lt;<span class="t">DomainEvent</span>&gt; _domainEvents = [];
+
+    <span class="c">// Read-only view for the UoW dispatcher</span>
+    <span class="k">public</span> <span class="t">IReadOnlyList</span>&lt;<span class="t">DomainEvent</span>&gt; DomainEvents => _domainEvents.AsReadOnly();
+
+    <span class="c">// Called from the aggregate's business methods to enqueue an event</span>
+    <span class="k">protected void</span> <span class="m">AddDomainEvent</span>(<span class="t">DomainEvent</span> domainEvent) =>
+        _domainEvents.<span class="m">Add</span>(domainEvent);
+
+    <span class="c">// Called by DapperUnitOfWork after dispatching events</span>
+    <span class="k">public void</span> <span class="m">ClearDomainEvents</span>() => _domainEvents.<span class="m">Clear</span>();
+}</code></pre>
+
+<div class="callout info">
+  <div class="callout-icon">🔑</div>
+  <p><strong>Why AggregateRoot stores events instead of publishing them directly:</strong> The aggregate must not know about messaging infrastructure. It just records <em>what happened</em>. The Unit of Work dispatches those events <em>after</em> the SQL transaction commits, so there is no chance of publishing an event for a transaction that later rolled back.</p>
+</div>
+</section>
+
+<section id="order-aggregate">
+<h3>Order Aggregate — the richest type in the codebase</h3>
+<p><code>Order</code> is the only aggregate root in this template. It owns a collection of <code>OrderItem</code>, each of which owns a collection of <code>OrderItemAttribute</code>.</p>
+
+<h4>Factory method: Order.Create</h4>
+<pre><code><span class="k">public static</span> <span class="t">Order</span> <span class="m">Create</span>(<span class="k">string</span> customerName, <span class="t">DateTime</span> orderDate, <span class="t">DateTime</span> createdAt)
+{
+    <span class="k">if</span> (<span class="t">string</span>.<span class="m">IsNullOrWhiteSpace</span>(customerName))
+        <span class="k">throw new</span> <span class="t">DomainException</span>(<span class="s">"CustomerName cannot be null or empty."</span>);
+
+    <span class="k">return new</span> <span class="t">Order</span>
+    {
+        CustomerName = customerName.<span class="m">Trim</span>(),
+        OrderDate    = orderDate,
+        IsActive     = <span class="k">true</span>,
+        CreatedAt    = createdAt,
+        UpdatedAt    = createdAt
+    };
+}</code></pre>
+<p>The factory method is the <strong>only way</strong> to create a valid Order. It enforces the invariant that <code>CustomerName</code> cannot be empty <em>before</em> the object exists. No validator can be forgotten because the domain enforces it unconditionally.</p>
+
+<div class="callout warn">
+  <div class="callout-icon">⚠️</div>
+  <p><strong>Why doesn't Create raise OrderCreatedEvent?</strong> At the point <code>Order.Create()</code> is called, the order has no database Id yet. The event payload needs the Id. The handler calls <code>repository.AddAsync(order)</code> first (which INSERTs and sets <code>order.Id</code>), then calls <code>order.RaiseCreatedEvent()</code>. This two-step pattern is intentional.</p>
+</div>
+
+<h4>Business methods — enforced through the aggregate only</h4>
+<pre><code><span class="c">// AddItem validates, creates the child, adds to internal list</span>
+<span class="k">public</span> <span class="t">OrderItem</span> <span class="m">AddItem</span>(<span class="k">string</span> productName, <span class="k">int</span> quantity, <span class="k">decimal</span> unitPrice, <span class="t">DateTime</span> createdAt)
+{
+    <span class="k">var</span> item = <span class="t">OrderItem</span>.<span class="m">Create</span>(Id, productName, quantity, unitPrice, createdAt);
+    _items.<span class="m">Add</span>(item);
+    UpdatedAt = createdAt;
+    <span class="k">return</span> item;
+}
+
+<span class="c">// RemoveItem guards against missing or already-inactive items</span>
+<span class="k">public void</span> <span class="m">RemoveItem</span>(<span class="k">int</span> itemId, <span class="t">DateTime</span> updatedAt)
+{
+    <span class="k">var</span> item = _items.<span class="m">FirstOrDefault</span>(i => i.Id == itemId)
+        ?? <span class="k">throw new</span> <span class="t">DomainException</span>(<span class="s">$"OrderItem '{itemId}' not found."</span>);
+
+    <span class="k">if</span> (!item.IsActive)
+        <span class="k">throw new</span> <span class="t">DomainException</span>(<span class="s">$"OrderItem '{itemId}' is already inactive."</span>);
+
+    item.<span class="m">Deactivate</span>(updatedAt);     <span class="c">// sets IsActive=false</span>
+    UpdatedAt = updatedAt;
+    <span class="m">AddDomainEvent</span>(<span class="k">new</span> <span class="t">OrderItemRemovedEvent</span>(Id, itemId, updatedAt));
+}</code></pre>
+
+<p><code>OrderItem.Create()</code> is <code>internal static</code> — only code inside the Domain assembly can call it. Handlers in the Application layer must go through <code>order.AddItem()</code>. This ensures <strong>every item creation passes Order's business rules</strong>.</p>
+
+<h4>Reconstitute — read-side reconstruction</h4>
+<pre><code><span class="c">// Used ONLY in OrderReadRepository — bypasses all invariants</span>
+<span class="k">public static</span> <span class="t">Order</span> <span class="m">Reconstitute</span>(
+    <span class="k">int</span> id, <span class="k">string</span> customerName, <span class="t">DateTime</span> orderDate, <span class="k">bool</span> isActive,
+    <span class="t">Guid</span> createdBy, <span class="t">DateTime</span> createdAt, <span class="t">Guid</span> updatedBy, <span class="t">DateTime</span> updatedAt,
+    <span class="t">IEnumerable</span>&lt;<span class="t">OrderItem</span>&gt; items)
+{
+    <span class="k">var</span> order = <span class="k">new</span> <span class="t">Order</span> { Id=id, CustomerName=customerName, ... };
+    order._items.<span class="m">AddRange</span>(items);
+    <span class="k">return</span> order;
+}</code></pre>
+<p>Reading an order from the database via Dapper produces raw column data. <code>Reconstitute</code> reassembles the aggregate without running any validation (the data was already valid when it was written). This is the CQRS read-side.</p>
+</section>
+
+<section id="domain-events">
+<h3>Domain Events</h3>
+<pre><code><span class="c">// Base hierarchy</span>
+<span class="k">public abstract record</span> <span class="t">BaseDomainEvent</span>
+{
+    <span class="k">public</span> <span class="t">DateTime</span> OccurredOn { <span class="k">get</span>; <span class="k">protected set</span>; } = <span class="t">DateTime</span>.UtcNow;
+}
+
+<span class="k">public abstract record</span> <span class="t">DomainEvent</span> : <span class="t">BaseDomainEvent</span>
+{
+    <span class="k">public</span> <span class="t">Guid</span>     EventId    { <span class="k">get</span>; <span class="k">init</span>; } = <span class="t">Guid</span>.<span class="m">NewGuid</span>();
+    <span class="k">public</span> <span class="t">DateTime</span> OccurredAt { <span class="k">get</span>; <span class="k">init</span>; } = <span class="t">DateTime</span>.UtcNow;
+}
+
+<span class="c">// Concrete event — raised by Order.RaiseCreatedEvent()</span>
+<span class="k">public sealed record</span> <span class="t">OrderCreatedEvent</span>(
+    <span class="k">int</span>      OrderId,
+    <span class="k">string</span>   CustomerName,
+    <span class="t">DateTime</span> OrderDate,
+    <span class="t">DateTime</span> CreatedAt) : <span class="t">DomainEvent</span>;</code></pre>
+
+<p>Domain events are <strong>records</strong> — immutable value objects that describe something that already happened. They use past tense (<code>OrderCreatedEvent</code>, not <code>CreateOrderEvent</code>). The <code>EventId</code> enables deduplication in downstream consumers.</p>
+
+<p>All 7 domain events in this template:</p>
+<div class="table-wrap">
+<table>
+  <tr><th>Event</th><th>Raised by</th><th>Handler in Application</th></tr>
+  <tr><td><code>OrderCreatedEvent</code></td><td><code>Order.RaiseCreatedEvent()</code></td><td><code>OrderDomainEventHandler</code></td></tr>
+  <tr><td><code>OrderUpdatedEvent</code></td><td><code>Order.Update()</code></td><td><code>OrderUpdatedDomainEventHandler</code></td></tr>
+  <tr><td><code>OrderDeletedEvent</code></td><td><code>Order.Deactivate()</code></td><td><code>OrderDeletedDomainEventHandler</code></td></tr>
+  <tr><td><code>OrderItemAddedEvent</code></td><td><code>Order.RaiseItemAddedEvent()</code></td><td><code>OrderItemAddedDomainEventHandler</code></td></tr>
+  <tr><td><code>OrderItemRemovedEvent</code></td><td><code>Order.RemoveItem()</code></td><td><code>OrderItemRemovedDomainEventHandler</code></td></tr>
+  <tr><td><code>OrderItemAttributeAddedEvent</code></td><td><code>Order.RaiseAttributeAddedEvent()</code></td><td><code>OrderItemAttributeAddedDomainEventHandler</code></td></tr>
+  <tr><td><code>OrderItemAttributeRemovedEvent</code></td><td><code>Order.RemoveAttributeFromItem()</code></td><td><code>OrderItemAttributeRemovedDomainEventHandler</code></td></tr>
+</table>
+</div>
+</section>
+
+<section id="domain-exceptions">
+<h3>Domain Exceptions</h3>
+<pre><code><span class="k">public class</span>  <span class="t">DomainException</span>        : <span class="t">Exception</span>     { ... }  <span class="c">// base — maps to HTTP 422</span>
+<span class="k">public sealed class</span> <span class="t">OrderNotFoundException</span> : <span class="t">DomainException</span> { ... }  <span class="c">// maps to HTTP 404</span></code></pre>
+<p>When the domain throws a <code>DomainException</code>, the <code>GlobalExceptionFilter</code> in the Api layer catches it and returns HTTP 422. <code>OrderNotFoundException</code> is a special subtype that maps to 404 specifically because not finding a resource is the client's concern, not a business rule violation.</p>
+</section>
+
+<!-- ═══════════════════════════ APPLICATION ═══════════════════════════ -->
+<section id="application-intro">
+<h2>Application Layer — TemplateMs.Application</h2>
+<p>The use-case ring. References only Domain. <strong>Never references Infrastructure.</strong> All "what the system can do" lives here. All "how the system does it" stays in Infrastructure.</p>
+</section>
+
+<section id="vertical-slices">
+<h3>Vertical Slices — why co-location matters</h3>
+<pre><code>Features/Order/               <span class="c">← everything about the Order feature</span>
+  Commands/
+    CreateOrderCommand.cs          <span class="c">← the message</span>
+    CreateOrderCommandHandler.cs   <span class="c">← the logic</span>
+    CreateOrderCommandValidator.cs <span class="c">← the rules</span>
+    AddOrderItemCommand.cs
+    AddOrderItemCommandHandler.cs
+    AddOrderItemCommandValidator.cs
+    <span class="c">... 4 commands total</span>
+  Queries/
+    GetOrderQuery.cs
+    GetOrderQueryHandler.cs
+    GetOrderQueryValidator.cs
+  Dtos/
+    OrderDto.cs
+    OrderItemDto.cs
+    OrderItemAttributeDto.cs
+  Events/
+    OrderDomainEventHandler.cs     <span class="c">← handles OrderCreatedEvent → queues outbox message</span>
+    <span class="c">... 7 handlers total</span>
+  Interfaces/
+    IOrderWriteRepository.cs
+    IOrderReadRepository.cs
+    IOrderItemWriteRepository.cs
+    IOrderItemAttributeWriteRepository.cs
+  Mapping/
+    OrderMapper.cs                 <span class="c">← manual, static, zero reflection</span></code></pre>
+
+<p>To understand "how do I add an item to an order?", you look in <code>Features/Order/Commands/AddOrderItemCommand.cs</code>. Everything is there. You never have to hunt across <code>/commands</code>, <code>/handlers</code>, <code>/validators</code> folders at the root.</p>
+</section>
+
+<section id="commands">
+<h3>Commands — sealed records, one intent per type</h3>
+<pre><code><span class="c">// CreateOrderCommand — carries everything needed to create an order</span>
+<span class="k">public sealed record</span> <span class="t">CreateOrderCommand</span>(
+    <span class="k">string</span>   CustomerName,
+    <span class="t">DateTime</span> OrderDate,
+    <span class="t">IReadOnlyList</span>&lt;<span class="t">CreateOrderItemData</span>&gt;? Items = <span class="k">null</span>);
+
+<span class="c">// Nested data types — also records (immutable)</span>
+<span class="k">public sealed record</span> <span class="t">CreateOrderItemData</span>(
+    <span class="k">string</span>  ProductName,
+    <span class="k">int</span>     Quantity,
+    <span class="k">decimal</span> UnitPrice,
+    <span class="t">IReadOnlyList</span>&lt;<span class="t">CreateOrderItemAttributeData</span>&gt;? Attributes = <span class="k">null</span>);
+
+<span class="k">public sealed record</span> <span class="t">CreateOrderItemAttributeData</span>(
+    <span class="k">string</span> AttributeName,
+    <span class="k">string</span> AttributeValue);</code></pre>
+
+<div class="callout tip">
+  <div class="callout-icon">✓</div>
+  <p><strong>Why records?</strong> Commands are messages — they represent an intent at a point in time. Making them <code>record</code> gives structural equality (two commands with the same data are equal), immutability (no mutation after creation), and <code>with</code> expressions for easy test cloning.</p>
+</div>
+
+<p>All commands in this template:</p>
+<div class="table-wrap">
+<table>
+  <tr><th>Command</th><th>HTTP endpoint</th><th>Returns</th></tr>
+  <tr><td><code>CreateOrderCommand</code></td><td>POST /api/orders</td><td><code>OrderDto</code></td></tr>
+  <tr><td><code>AddOrderItemCommand</code></td><td>POST /api/orders/{id}/items</td><td><code>OrderItemDto</code></td></tr>
+  <tr><td><code>RemoveOrderItemCommand</code></td><td>DELETE /api/orders/{id}/items/{itemId}</td><td><em>void</em></td></tr>
+  <tr><td><code>AddOrderItemAttributeCommand</code></td><td>POST /api/orders/{id}/items/{itemId}/attributes</td><td><code>OrderItemAttributeDto</code></td></tr>
+  <tr><td><code>RemoveOrderItemAttributeCommand</code></td><td>DELETE .../attributes/{attrId}</td><td><em>void</em></td></tr>
+</table>
+</div>
+</section>
+
+<section id="queries">
+<h3>Queries — read-only, no side effects</h3>
+<pre><code><span class="c">// The entire query type — just the Id needed to retrieve an order</span>
+<span class="k">public sealed record</span> <span class="t">GetOrderQuery</span>(<span class="k">int</span> OrderId);</code></pre>
+<p>Queries carry only what is needed to identify the data. They never carry data that would mutate state. The handler returns a DTO directly from the read database — it never loads an aggregate from the write repository.</p>
+</section>
+
+<section id="handlers">
+<h3>Handlers — the use-case logic</h3>
+<p>WolverineFX discovers handlers by convention: a <code>sealed class</code> ending in <code>"Handler"</code> with a <code>Handle()</code> method. <strong>No interface required.</strong></p>
+
+<h4>CreateOrderCommandHandler — the most complete example</h4>
+<pre><code><span class="k">public sealed class</span> <span class="t">CreateOrderCommandHandler</span>
+{
+    <span class="c">// Constructor injection — Wolverine resolves from DI</span>
+    <span class="k">public</span> <span class="t">CreateOrderCommandHandler</span>(
+        <span class="t">IOrderWriteRepository</span>          writeRepository,
+        <span class="t">IOrderItemWriteRepository</span>      itemWriteRepository,
+        <span class="t">IOrderItemAttributeWriteRepository</span> attributeWriteRepository,
+        <span class="t">IUnitOfWork</span>                    unitOfWork,
+        <span class="t">IDateTimeProvider</span>              dateTimeProvider) { ... }
+
+    <span class="c">// Return type → IMessageBus.InvokeAsync&lt;OrderDto&gt;() at the call site</span>
+    <span class="k">public async</span> <span class="t">Task</span>&lt;<span class="t">OrderDto</span>&gt; <span class="m">Handle</span>(<span class="t">CreateOrderCommand</span> command, <span class="t">CancellationToken</span> ct)
+    {
+        <span class="k">var</span> now   = _dateTimeProvider.UtcNow;
+        <span class="k">var</span> order = <span class="t">Order</span>.<span class="m">Create</span>(command.CustomerName, command.OrderDate, now);
+
+        _unitOfWork.<span class="m">RegisterAggregate</span>(order);          <span class="c">// track for domain event dispatch</span>
+        <span class="k">await</span> _writeRepository.<span class="m">AddAsync</span>(order, ct);      <span class="c">// INSERT + assigns order.Id</span>
+
+        <span class="k">foreach</span> (<span class="k">var</span> itemData <span class="k">in</span> command.Items ?? [])
+        {
+            <span class="k">var</span> item = order.<span class="m">AddItem</span>(itemData.ProductName, itemData.Quantity, itemData.UnitPrice, now);
+            <span class="k">await</span> _itemWriteRepository.<span class="m">AddAsync</span>(item, order.Id, ct);
+            order.<span class="m">RaiseItemAddedEvent</span>(item);   <span class="c">// now item.Id is set by the repository</span>
+
+            <span class="k">foreach</span> (<span class="k">var</span> attrData <span class="k">in</span> itemData.Attributes ?? [])
+            {
+                <span class="k">var</span> attr = item.<span class="m">AddAttribute</span>(attrData.AttributeName, attrData.AttributeValue, now);
+                <span class="k">await</span> _attributeWriteRepository.<span class="m">AddAsync</span>(attr, item.Id, ct);
+                order.<span class="m">RaiseAttributeAddedEvent</span>(item.Id, attr);
+            }
+        }
+
+        <span class="k">await</span> _unitOfWork.<span class="m">CommitAsync</span>(ct);    <span class="c">// SQL COMMIT + dispatch domain events</span>
+        <span class="k">return</span> <span class="t">OrderMapper</span>.<span class="m">ToDto</span>(order);
+    }
+}</code></pre>
+
+<div class="callout info">
+  <div class="callout-icon">🔑</div>
+  <p><strong>The two-pass event raise pattern:</strong> <code>AddItem()</code> creates the item and adds it to the aggregate's in-memory list. The repository's <code>AddAsync</code> INSERTs it and sets <code>item.Id</code> from <code>OUTPUT INSERTED.Id</code>. Only <em>then</em> does the handler call <code>RaiseItemAddedEvent(item)</code> — because the event payload needs a valid <code>item.Id</code>.</p>
+</div>
+
+<h4>AddOrderItemCommandHandler — loads existing aggregate first</h4>
+<pre><code><span class="k">public async</span> <span class="t">Task</span>&lt;<span class="t">OrderItemDto</span>&gt; <span class="m">Handle</span>(<span class="t">AddOrderItemCommand</span> command, <span class="t">CancellationToken</span> ct)
+{
+    <span class="c">// Load the WRITE-SIDE aggregate (fully reconstituted with items + attrs)</span>
+    <span class="k">var</span> order = <span class="k">await</span> _readRepository.<span class="m">GetAggregateByIdAsync</span>(command.OrderId, ct)
+        ?? <span class="k">throw new</span> <span class="t">OrderNotFoundException</span>(command.OrderId);
+
+    <span class="k">var</span> now  = _dateTimeProvider.UtcNow;
+    <span class="k">var</span> item = order.<span class="m">AddItem</span>(command.ProductName, command.Quantity, command.UnitPrice, now);
+
+    _unitOfWork.<span class="m">RegisterAggregate</span>(order);
+    <span class="k">await</span> _itemWriteRepository.<span class="m">AddAsync</span>(item, order.Id, ct);
+    order.<span class="m">RaiseItemAddedEvent</span>(item);
+    <span class="k">await</span> _unitOfWork.<span class="m">CommitAsync</span>(ct);
+
+    <span class="k">return</span> <span class="t">OrderMapper</span>.<span class="m">ToItemDto</span>(item);
+}</code></pre>
+<p>Handlers that modify an existing aggregate must load it first using <code>GetAggregateByIdAsync</code> (which returns a fully-hydrated <code>Order</code> with all items and attributes). This is the <strong>write side</strong> read — the aggregate is loaded so its business methods can guard invariants.</p>
+</section>
+
+<section id="validators">
+<h3>Validators — FluentValidation, Application layer only</h3>
+<pre><code><span class="k">public sealed class</span> <span class="t">CreateOrderCommandValidator</span> : <span class="t">AbstractValidator</span>&lt;<span class="t">CreateOrderCommand</span>&gt;
+{
+    <span class="k">public</span> <span class="t">CreateOrderCommandValidator</span>()
+    {
+        <span class="m">RuleFor</span>(x => x.CustomerName).<span class="m">NotEmpty</span>().<span class="m">WithMessage</span>(<span class="s">"CustomerName is required."</span>);
+        <span class="m">RuleFor</span>(x => x.OrderDate).<span class="m">NotEmpty</span>().<span class="m">WithMessage</span>(<span class="s">"OrderDate is required."</span>);
+
+        <span class="m">RuleForEach</span>(x => x.Items).<span class="m">ChildRules</span>(item => {
+            item.<span class="m">RuleFor</span>(i => i.ProductName).<span class="m">NotEmpty</span>();
+            item.<span class="m">RuleFor</span>(i => i.Quantity).<span class="m">GreaterThan</span>(0);
+            item.<span class="m">RuleFor</span>(i => i.UnitPrice).<span class="m">GreaterThanOrEqualTo</span>(0m);
+        });
+    }
+}</code></pre>
+<p>Validators enforce <strong>input validity</strong> (is the HTTP request well-formed?). Domain exceptions enforce <strong>business invariants</strong> (does the rule make sense for this aggregate?). These are different concerns at different layers.</p>
+</section>
+
+<section id="behaviors">
+<h3>Middleware Behaviors — Wolverine pipeline</h3>
+<p>Wolverine middleware are plain classes with static or instance methods named <code>Before</code>, <code>After</code>, <code>Finally</code>, <code>OnException</code>, or <code>ExecuteAsync</code>. They run around every handler that Wolverine processes.</p>
+
+<h4>LoggingBehavior</h4>
+<pre><code><span class="k">public sealed class</span> <span class="t">LoggingBehavior</span>
+{
+    <span class="c">// Runs BEFORE the handler</span>
+    <span class="k">public static void</span> <span class="m">Before</span>(<span class="t">Envelope</span> envelope, <span class="t">ILogger</span>&lt;<span class="t">LoggingBehavior</span>&gt; logger) =>
+        logger.<span class="m">LogInformation</span>(<span class="s">"Handling {MessageType} id={MessageId}"</span>,
+            envelope.MessageType, envelope.Id);
+
+    <span class="c">// Runs AFTER successful handler</span>
+    <span class="k">public static void</span> <span class="m">After</span>(<span class="t">Envelope</span> envelope, <span class="t">ILogger</span>&lt;<span class="t">LoggingBehavior</span>&gt; logger) =>
+        logger.<span class="m">LogInformation</span>(<span class="s">"Handled {MessageType} id={MessageId}"</span>,
+            envelope.MessageType, envelope.Id);
+
+    <span class="c">// Runs when an exception is thrown</span>
+    <span class="k">public static void</span> <span class="m">OnException</span>(<span class="t">Exception</span> ex, <span class="t">Envelope</span> envelope, <span class="t">ILogger</span> logger) =>
+        logger.<span class="m">LogError</span>(ex, <span class="s">"Failed {MessageType} id={MessageId}"</span>,
+            envelope.MessageType, envelope.Id);
+}</code></pre>
+
+<h4>ValidationBehavior</h4>
+<pre><code><span class="k">public sealed class</span> <span class="t">ValidationBehavior</span>
+{
+    <span class="c">// ExecuteAsync wraps the handler — runs before and after</span>
+    <span class="k">public static async</span> <span class="t">Task</span> <span class="m">ExecuteAsync</span>&lt;<span class="t">T</span>&gt;(
+        <span class="t">T</span> message,
+        <span class="t">IValidator</span>&lt;<span class="t">T</span>&gt;? validator,   <span class="c">// null if no validator registered for this type</span>
+        <span class="t">Func</span>&lt;<span class="t">Task</span>&gt; next,
+        <span class="t">CancellationToken</span> ct) <span class="k">where</span> <span class="t">T</span> : <span class="k">notnull</span>
+    {
+        <span class="k">if</span> (validator <span class="k">is not null</span>)
+        {
+            <span class="k">var</span> result = <span class="k">await</span> validator.<span class="m">ValidateAsync</span>(message, ct);
+            <span class="k">if</span> (!result.IsValid)
+                <span class="k">throw new</span> <span class="t">ValidationException</span>(result.Errors);
+        }
+        <span class="k">await</span> next();   <span class="c">// proceed to handler</span>
+    }
+}</code></pre>
+
+<h4>TransactionBehavior</h4>
+<pre><code><span class="k">public sealed class</span> <span class="t">TransactionBehavior</span>
+{
+    <span class="k">public static async</span> <span class="t">Task</span> <span class="m">ExecuteAsync</span>(
+        <span class="t">IUnitOfWork</span> unitOfWork,
+        <span class="t">Func</span>&lt;<span class="t">Task</span>&gt;  next,
+        <span class="t">CancellationToken</span> ct)
+    {
+        <span class="k">await</span> next();                          <span class="c">// run the handler</span>
+        <span class="k">await</span> unitOfWork.<span class="m">CommitAsync</span>(ct);      <span class="c">// commit if handler didn't already</span>
+    }
+}</code></pre>
+
+<div class="callout info">
+  <div class="callout-icon">💡</div>
+  <p><strong>TransactionBehavior is a safety net.</strong> Handlers like <code>CreateOrderCommandHandler</code> call <code>CommitAsync</code> explicitly — they need to commit <em>before</em> building the return DTO. The <code>TransactionBehavior</code> calls it again but the second call is harmless because the transaction was already committed.</p>
+</div>
+</section>
+
+<section id="dtos">
+<h3>DTOs — sealed records, internal currency</h3>
+<pre><code><span class="k">public sealed record</span> <span class="t">OrderDto</span>(
+    <span class="k">int</span>      Id,
+    <span class="k">string</span>   CustomerName,
+    <span class="t">DateTime</span> OrderDate,
+    <span class="k">bool</span>     IsActive,
+    <span class="t">IReadOnlyList</span>&lt;<span class="t">OrderItemDto</span>&gt; Items,
+    <span class="t">DateTime</span> CreatedAt,
+    <span class="t">DateTime</span> UpdatedAt,
+    <span class="t">Guid</span>     CreatedBy,
+    <span class="t">Guid</span>     UpdatedBy);</code></pre>
+<p>DTOs are the currency between Application and Api. They are a stable internal representation. The Api layer maps them to <code>OrderResponse</code> which is the HTTP contract — the two can diverge independently.</p>
+</section>
+
+<section id="mapper">
+<h3>Manual Mapper — no reflection, zero magic</h3>
+<pre><code><span class="k">public static class</span> <span class="t">OrderMapper</span>
+{
+    <span class="k">public static</span> <span class="t">OrderDto</span> <span class="m">ToDto</span>(<span class="t">Order</span> order) =>
+        <span class="k">new</span>(
+            order.Id,
+            order.CustomerName,
+            order.OrderDate,
+            order.IsActive,
+            order.Items.<span class="m">Select</span>(<span class="m">ToItemDto</span>).<span class="m">ToList</span>().<span class="m">AsReadOnly</span>(),
+            order.CreatedAt,
+            order.UpdatedAt,
+            order.CreatedBy,
+            order.UpdatedBy);
+
+    <span class="k">public static</span> <span class="t">OrderItemDto</span> <span class="m">ToItemDto</span>(<span class="t">OrderItem</span> item) => <span class="k">new</span>(
+        item.Id, item.OrderId, item.ProductName, item.Quantity,
+        item.UnitPrice, item.TotalAmount, item.IsActive,
+        item.Attributes.<span class="m">Select</span>(<span class="m">ToAttributeDto</span>).<span class="m">ToList</span>().<span class="m">AsReadOnly</span>(),
+        item.CreatedAt, item.UpdatedAt, item.CreatedBy, item.UpdatedBy);
+}</code></pre>
+<p>A compiler error immediately tells you if a field is renamed or removed. There is no runtime reflection, no configuration file, no convention magic to debug.</p>
+</section>
+
+<section id="app-interfaces">
+<h3>Interfaces — Application defines contracts, Infrastructure fulfils them</h3>
+<pre><code><span class="c">// Application defines — Infrastructure implements</span>
+<span class="k">public interface</span> <span class="i">IUnitOfWork</span> : <span class="i">IAsyncDisposable</span>
+{
+    <span class="k">void</span>  <span class="m">RegisterAggregate</span>(<span class="t">AggregateRoot</span> aggregate);
+    <span class="t">Task</span>  <span class="m">QueueOutboxMessageAsync</span>(<span class="k">string</span> messageType, <span class="k">string</span> payload, <span class="t">CancellationToken</span> ct);
+    <span class="t">Task</span>  <span class="m">CommitAsync</span>(<span class="t">CancellationToken</span> ct);
+    <span class="t">Task</span>  <span class="m">RollbackAsync</span>(<span class="t">CancellationToken</span> ct);
+}
+
+<span class="k">public interface</span> <span class="i">ICommandDbConnectionFactory</span>
+{
+    <span class="t">IDbConnection</span> <span class="m">CreateConnection</span>();   <span class="c">// opens a connection to the WRITE database</span>
+}
+
+<span class="k">public interface</span> <span class="i">IQueryDbConnectionFactory</span>
+{
+    <span class="t">IDbConnection</span> <span class="m">CreateConnection</span>();   <span class="c">// opens a connection to the READ database</span>
+}
+
+<span class="k">public interface</span> <span class="i">IDomainEventDispatcher</span>
+{
+    <span class="t">Task</span> <span class="m">DispatchAsync</span>(<span class="t">IEnumerable</span>&lt;<span class="t">AggregateRoot</span>&gt; aggregates, <span class="t">CancellationToken</span> ct);
+}
+
+<span class="k">public interface</span> <span class="i">IMessageBusPublisher</span>
+{
+    <span class="t">Task</span> <span class="m">PublishAsync</span>&lt;<span class="t">T</span>&gt;(<span class="t">T</span> message, <span class="t">CancellationToken</span> ct) <span class="k">where</span> <span class="t">T</span> : <span class="k">class</span>;
+}
+
+<span class="k">public interface</span> <span class="i">ICurrentUserProvider</span>
+{
+    <span class="t">Guid</span> UserId { <span class="k">get</span>; }   <span class="c">// reads JWT "sub" claim; falls back to Guid.NewGuid()</span>
+}
+
+<span class="k">public interface</span> <span class="i">IDateTimeProvider</span>
+{
+    <span class="t">DateTime</span> UtcNow { <span class="k">get</span>; }   <span class="c">// abstracted so tests can control time</span>
+}</code></pre>
+</section>
+
+<section id="integration-events">
+<h3>Integration Events — crossing service boundaries</h3>
+<pre><code><span class="c">// Serialised to JSON → sent to ActiveMQ → consumed by other microservices</span>
+<span class="k">public sealed record</span> <span class="t">OrderCreatedIntegrationEvent</span>(
+    <span class="k">int</span>      OrderId,
+    <span class="k">string</span>   CustomerName,
+    <span class="t">DateTime</span> OrderDate,
+    <span class="t">DateTime</span> CreatedAt,
+    <span class="t">Guid</span>     EventId);     <span class="c">// for idempotency at the consumer side</span></code></pre>
+
+<p>Integration events differ from domain events in a critical way:</p>
+<div class="table-wrap">
+<table>
+  <tr><th></th><th>Domain Event</th><th>Integration Event</th></tr>
+  <tr><td>Scope</td><td>In-process, this service only</td><td>Cross-service, serialised to JSON</td></tr>
+  <tr><td>Transport</td><td>WolverineFX in-process bus</td><td>ActiveMQ queue</td></tr>
+  <tr><td>Delivery</td><td>Synchronous, in the same transaction</td><td>At-least-once, via outbox</td></tr>
+  <tr><td>Type</td><td><code>sealed record : DomainEvent</code></td><td><code>sealed record</code> (no base class)</td></tr>
+  <tr><td>Raised by</td><td>Aggregate methods</td><td>Domain event handlers</td></tr>
+</table>
+</div>
+</section>
+
+<!-- ═══════════════════════════ INFRASTRUCTURE ═══════════════════════════ -->
+<section id="infra-intro">
+<h2>Infrastructure Layer — TemplateMs.Infrastructure</h2>
+<p>The outer ring. Implements all Application interfaces. References Application, Domain, and Sql. <strong>Must never reference TemplateMs.Api.</strong></p>
+</section>
+
+<section id="connection-factories">
+<h3>Connection Factories — separating read and write concerns</h3>
+<pre><code><span class="k">public sealed class</span> <span class="t">CommandDbConnectionFactory</span> : <span class="i">ICommandDbConnectionFactory</span>
+{
+    <span class="k">private readonly string</span> _connectionString;
+    <span class="k">public</span> <span class="t">CommandDbConnectionFactory</span>(<span class="t">IOptions</span>&lt;<span class="t">InfrastructureOptions</span>&gt; options) =>
+        _connectionString = options.Value.CommandConnectionString;
+
+    <span class="k">public</span> <span class="t">IDbConnection</span> <span class="m">CreateConnection</span>()
+    {
+        <span class="k">var</span> conn = <span class="k">new</span> <span class="t">SqlConnection</span>(_connectionString);
+        conn.<span class="m">Open</span>();          <span class="c">// opens synchronously — called from UoW constructor</span>
+        <span class="k">return</span> conn;
+    }
+}
+
+<span class="c">// QueryDbConnectionFactory is identical but uses QueryConnectionString</span></code></pre>
+<p>Two factories — two connection strings. Both point to the same SQL Server in development. In production you can point the query factory to a read replica. <strong>Zero code changes are required</strong> — it's purely a configuration change.</p>
+</section>
+
+<section id="uow">
+<h3>Unit of Work — the transaction coordinator</h3>
+<p>This is the most important Infrastructure type to understand. It coordinates the SQL transaction, domain event dispatch, and outbox persistence.</p>
+<pre><code><span class="k">public sealed class</span> <span class="t">DapperUnitOfWork</span> : <span class="i">IUnitOfWork</span>, <span class="i">IDisposable</span>, <span class="i">IAsyncDisposable</span>
+{
+    <span class="k">private readonly</span> <span class="t">List</span>&lt;<span class="t">AggregateRoot</span>&gt; _trackedAggregates = [];
+    <span class="k">private readonly</span> <span class="t">IDomainEventDispatcher</span> _dispatcher;
+
+    <span class="c">// Opens connection + begins transaction in the constructor</span>
+    <span class="k">public</span> <span class="t">DapperUnitOfWork</span>(<span class="t">ICommandDbConnectionFactory</span> factory, ...)
+    {
+        Connection  = factory.<span class="m">CreateConnection</span>();
+        Transaction = Connection.<span class="m">BeginTransaction</span>(<span class="t">IsolationLevel</span>.ReadCommitted);
+    }
+
+    <span class="c">// Exposed to write repositories — they share this connection + transaction</span>
+    <span class="k">public</span> <span class="t">IDbConnection</span>  Connection  { <span class="k">get</span>; }
+    <span class="k">public</span> <span class="t">IDbTransaction</span> Transaction { <span class="k">get</span>; }
+
+    <span class="k">public void</span> <span class="m">RegisterAggregate</span>(<span class="t">AggregateRoot</span> agg) => _trackedAggregates.<span class="m">Add</span>(agg);
+
+    <span class="k">public async</span> <span class="t">Task</span> <span class="m">QueueOutboxMessageAsync</span>(<span class="k">string</span> messageType, <span class="k">string</span> payload, ...)
+    {
+        <span class="c">// INSERT happens inside the SAME transaction as the business data</span>
+        <span class="k">await</span> Connection.<span class="m">ExecuteAsync</span>(<span class="t">OutboxSql</span>.Insert,
+            <span class="k">new</span> { Id = <span class="t">Guid</span>.<span class="m">NewGuid</span>(), MessageType = messageType, Payload = payload, ... },
+            Transaction);
+    }
+
+    <span class="k">public async</span> <span class="t">Task</span> <span class="m">CommitAsync</span>(...)
+    {
+        Transaction.<span class="m">Commit</span>();                     <span class="c">// 1. commit all SQL writes atomically</span>
+        <span class="k">var</span> aggregates = _trackedAggregates.<span class="m">ToList</span>();
+        _trackedAggregates.<span class="m">Clear</span>();
+        <span class="k">await</span> _dispatcher.<span class="m">DispatchAsync</span>(aggregates, ct); <span class="c">// 2. dispatch domain events</span>
+    }
+}</code></pre>
+
+<div class="callout tip">
+  <div class="callout-icon">🔑</div>
+  <p><strong>The ordering in CommitAsync matters.</strong> SQL <code>Transaction.Commit()</code> happens first. Domain events are dispatched only after the data is safely committed. If event dispatch fails, the data is still saved — the worst case is a missed domain event, not a lost order.</p>
+</div>
+</section>
+
+<section id="repositories">
+<h3>Repositories — write-side vs read-side</h3>
+
+<h4>Write repository — shares the UoW transaction</h4>
+<pre><code><span class="k">public sealed class</span> <span class="t">OrderWriteRepository</span> : <span class="i">IOrderWriteRepository</span>
+{
+    <span class="k">private readonly</span> <span class="t">DapperUnitOfWork</span>     _unitOfWork;   <span class="c">// concrete type — shares tx</span>
+    <span class="k">private readonly</span> <span class="t">ICurrentUserProvider</span> _currentUser;
+
+    <span class="k">public async</span> <span class="t">Task</span> <span class="m">AddAsync</span>(<span class="t">Order</span> order, <span class="t">CancellationToken</span> ct)
+    {
+        <span class="k">var</span> userId = _currentUser.UserId;
+
+        <span class="c">// ExecuteScalarAsync returns the IDENTITY value via OUTPUT INSERTED.Id</span>
+        <span class="k">var</span> id = <span class="k">await</span> _unitOfWork.Connection.<span class="m">ExecuteScalarAsync</span>&lt;<span class="k">int</span>&gt;(
+            <span class="t">OrderCommandSql</span>.Insert,
+            <span class="k">new</span> { order.CustomerName, order.OrderDate, order.IsActive,
+                  CreatedBy = userId, order.CreatedAt,
+                  UpdatedBy = userId, order.UpdatedAt },
+            _unitOfWork.Transaction);    <span class="c">// participates in the shared tx</span>
+
+        order.Id        = id;            <span class="c">// hydrate the aggregate with DB-assigned Id</span>
+        order.CreatedBy = userId;
+        order.UpdatedBy = userId;
+        order.<span class="m">RaiseCreatedEvent</span>(order.CreatedAt);  <span class="c">// safe now — Id is assigned</span>
+    }
+}</code></pre>
+
+<h4>Read repository — independent connection, no transaction</h4>
+<pre><code><span class="k">public sealed class</span> <span class="t">OrderReadRepository</span> : <span class="i">IOrderReadRepository</span>
+{
+    <span class="k">private readonly</span> <span class="t">IQueryDbConnectionFactory</span> _queryFactory;
+
+    <span class="k">public async</span> <span class="t">Task</span>&lt;<span class="t">OrderDto</span>?&gt; <span class="m">GetByIdAsync</span>(<span class="k">int</span> orderId, <span class="t">CancellationToken</span> ct)
+    {
+        <span class="k">using</span> <span class="t">IDbConnection</span> conn = _queryFactory.<span class="m">CreateConnection</span>();  <span class="c">// own connection</span>
+
+        <span class="c">// Multi-result-set: Grid 1 = Order, Grid 2 = OrderItems, Grid 3 = OrderItemAttributes</span>
+        <span class="k">using var</span> multi = <span class="k">await</span> conn.<span class="m">QueryMultipleAsync</span>(<span class="t">OrderQuerySql</span>.GetById, <span class="k">new</span> { Id = orderId });
+
+        <span class="k">var</span> orderRow = <span class="k">await</span> multi.<span class="m">ReadSingleOrDefaultAsync</span>&lt;<span class="t">OrderRow</span>&gt;();
+        <span class="k">if</span> (orderRow <span class="k">is null</span>) <span class="k">return null</span>;
+
+        <span class="k">var</span> itemRows = (<span class="k">await</span> multi.<span class="m">ReadAsync</span>&lt;<span class="t">OrderItemRow</span>&gt;()).<span class="m">ToList</span>();
+        <span class="k">var</span> attrRows = (<span class="k">await</span> multi.<span class="m">ReadAsync</span>&lt;<span class="t">OrderItemAttributeRow</span>&gt;()).<span class="m">ToList</span>();
+
+        <span class="k">return</span> <span class="m">MapToDto</span>(orderRow, itemRows, attrRows);
+    }
+}</code></pre>
+
+<p>The single SQL call to <code>OrderQuerySql.GetById</code> returns three grids in one round-trip — the order header, all its items, and all attributes for all items. Dapper's <code>QueryMultiple</code> reads them sequentially. This avoids N+1 queries entirely.</p>
+</section>
+
+<section id="wolverine-infra">
+<h3>WolverineFX Wiring</h3>
+<pre><code><span class="k">public static class</span> <span class="t">WolverineRegistration</span>
+{
+    <span class="k">public static void</span> <span class="m">Configure</span>(<span class="t">WolverineOptions</span> opts, <span class="k">string</span> commandConnectionString)
+    {
+        <span class="c">// Scan TemplateMs.Application for handlers (classes ending in "Handler")</span>
+        opts.Discovery.<span class="m">IncludeAssembly</span>(<span class="k">typeof</span>(<span class="t">CreateOrderCommandHandler</span>).Assembly);
+
+        <span class="c">// SQL Server durable inbox/outbox — Wolverine's own schema tables</span>
+        opts.<span class="m">PersistMessagesWithSqlServer</span>(commandConnectionString);
+
+        <span class="c">// Global middleware — runs around every handler</span>
+        opts.Policies.<span class="m">AddMiddleware</span>&lt;<span class="t">LoggingBehavior</span>&gt;();
+    }
+}
+
+<span class="c">// WolverineEventForwarders — bridges DomainEvent → IMessageBus</span>
+<span class="k">public sealed class</span> <span class="t">WolverineEventForwarders</span> : <span class="i">IDomainEventDispatcher</span>
+{
+    <span class="k">private readonly</span> <span class="t">IMessageBus</span> _bus;
+
+    <span class="k">public async</span> <span class="t">Task</span> <span class="m">DispatchAsync</span>(<span class="t">IEnumerable</span>&lt;<span class="t">AggregateRoot</span>&gt; aggregates, ...)
+    {
+        <span class="k">foreach</span> (<span class="k">var</span> agg <span class="k">in</span> aggregates)
+        {
+            <span class="k">foreach</span> (<span class="k">var</span> evt <span class="k">in</span> agg.DomainEvents)
+                <span class="k">await</span> _bus.<span class="m">PublishAsync</span>(evt);   <span class="c">// re-enters Wolverine for domain event handlers</span>
+            agg.<span class="m">ClearDomainEvents</span>();
+        }
+    }
+}</code></pre>
+</section>
+
+<section id="outbox">
+<h3>Outbox Pattern — durable at-least-once delivery</h3>
+<pre><code><span class="c">// OutboxStorage handles data access for the OutboxMessages table</span>
+<span class="k">public sealed class</span> <span class="t">OutboxStorage</span>
+{
+    <span class="k">public async</span> <span class="t">Task</span>&lt;<span class="t">IEnumerable</span>&lt;<span class="t">OutboxRecord</span>&gt;&gt; <span class="m">GetUnprocessedAsync</span>()
+    {
+        <span class="k">using</span> <span class="t">IDbConnection</span> conn = _connectionFactory.<span class="m">CreateConnection</span>();
+        <span class="k">return await</span> conn.<span class="m">QueryAsync</span>&lt;<span class="t">OutboxRecord</span>&gt;(
+            <span class="t">OutboxSql</span>.SelectUnprocessed, <span class="k">new</span> { BatchSize = _batchSize });
+    }
+
+    <span class="k">public async</span> <span class="t">Task</span> <span class="m">MarkProcessedAsync</span>(<span class="t">Guid</span> messageId)  { ... }
+    <span class="k">public async</span> <span class="t">Task</span> <span class="m">MarkFailedAsync</span>(<span class="t">Guid</span> messageId, <span class="k">string</span> error) { ... }
+}</code></pre>
+
+<div class="flow">
+<span class="hi">Handler commits transaction</span>
+    <span class="hi2">│</span>  OutboxMessages INSERT is inside this transaction
+    <span class="hi2">▼</span>
+<span class="hi2">SQL Transaction.Commit()</span>
+    <span class="hi2">│</span>  Order row + OutboxMessages row — both committed atomically
+    <span class="hi2">▼</span>
+<span class="hi3">OutboxProcessor (BackgroundService)</span>
+    <span class="hi3">│</span>  polls every 5 000ms
+    <span class="hi3">│</span>  SELECT TOP 50 FROM OutboxMessages WHERE ProcessedAt IS NULL
+    <span class="hi3">▼</span>
+<span class="hi4">For each OutboxRecord:</span>
+    <span class="hi4">│</span>  ActiveMqPublisher.PublishAsync(OutboxEnvelope)
+    <span class="hi4">│</span>  → success: UPDATE ProcessedAt = now
+    <span class="hi4">│</span>  → failure: UPDATE Error = ex.Message
+    <span class="hi4">▼</span>
+<span class="hi">ActiveMQ: order.events queue</span>
+</div>
+
+<p><strong>What if the process crashes between commit and publish?</strong> The outbox record has <code>ProcessedAt = NULL</code> and <code>Error = NULL</code>. On next startup the <code>OutboxProcessor</code> will pick it up and retry. This is <strong>at-least-once delivery</strong> — consumers must be idempotent (use the <code>EventId</code> for deduplication).</p>
+</section>
+
+<section id="activemq">
+<h3>ActiveMQ Publisher</h3>
+<pre><code><span class="k">public sealed class</span> <span class="t">ActiveMqPublisher</span> : <span class="i">IMessageBusPublisher</span>, <span class="i">IAsyncDisposable</span>
+{
+    <span class="k">public async</span> <span class="t">Task</span> <span class="m">PublishAsync</span>&lt;<span class="t">T</span>&gt;(<span class="t">T</span> message, <span class="t">CancellationToken</span> ct) <span class="k">where</span> <span class="t">T</span> : <span class="k">class</span>
+    {
+        <span class="k">var</span> factory    = <span class="k">new</span> <span class="t">ConnectionFactory</span>(_config.BrokerUrl);
+        <span class="k">using var</span> conn    = <span class="k">await</span> <span class="t">Task</span>.<span class="m">Run</span>(() => factory.<span class="m">CreateConnection</span>(_config.Username, _config.Password));
+        conn.<span class="m">Start</span>();
+
+        <span class="k">using var</span> session  = conn.<span class="m">CreateSession</span>(<span class="t">AcknowledgementMode</span>.AutoAcknowledge);
+        <span class="k">var</span> destination = session.<span class="m">GetQueue</span>(_config.OrderEventsQueue);
+        <span class="k">using var</span> producer = session.<span class="m">CreateProducer</span>(destination);
+
+        <span class="k">var</span> json       = <span class="t">JsonSerializer</span>.<span class="m">Serialize</span>(message);
+        <span class="k">var</span> nmsMessage = session.<span class="m">CreateTextMessage</span>(json);
+        nmsMessage.Properties.<span class="m">SetString</span>(<span class="s">"MessageType"</span>, <span class="k">typeof</span>(<span class="t">T</span>).<span class="m">FullName</span>);
+        producer.<span class="m">Send</span>(nmsMessage);
+    }
+}</code></pre>
+</section>
+
+<section id="background-services">
+<h3>Background Services</h3>
+<div class="table-wrap">
+<table>
+  <tr><th>Service</th><th>Role</th><th>Status</th></tr>
+  <tr><td><code>OutboxProcessor</code></td><td>Polls OutboxMessages, publishes to AMQ, marks processed/failed</td><td>Fully implemented</td></tr>
+  <tr><td><code>ActiveMqConsumer</code></td><td>Subscribes to AMQ topics, routes to inbox pattern</td><td>Scaffold — extend with topic subscriptions</td></tr>
+  <tr><td><code>InboxProcessor</code></td><td>Processes received AMQ messages idempotently</td><td>Scaffold — extend with inbox table polling</td></tr>
+</table>
+</div>
+</section>
+
+<section id="current-user">
+<h3>CurrentUserProvider — bridging HTTP to Domain</h3>
+<pre><code><span class="k">public sealed class</span> <span class="t">CurrentUserProvider</span> : <span class="i">ICurrentUserProvider</span>
+{
+    <span class="k">public</span> <span class="t">Guid</span> UserId
+    {
+        <span class="k">get</span>
+        {
+            <span class="k">var</span> principal = _httpContextAccessor.HttpContext?.User;
+            <span class="k">if</span> (principal <span class="k">is null</span>) <span class="k">return</span> <span class="t">Guid</span>.<span class="m">NewGuid</span>();  <span class="c">// background ops</span>
+
+            <span class="k">var</span> sub = principal.<span class="m">FindFirst</span>(<span class="t">ClaimTypes</span>.NameIdentifier)?.Value;
+            <span class="k">return</span> <span class="t">Guid</span>.<span class="m">TryParse</span>(sub, <span class="k">out var</span> guid) ? guid : <span class="t">Guid</span>.<span class="m">NewGuid</span>();
+        }
+    }
+}</code></pre>
+<p>Reads the JWT <code>sub</code> claim (mapped to <code>ClaimTypes.NameIdentifier</code> by ASP.NET Core). Falls back to a new GUID for background operations (e.g., the <code>OutboxProcessor</code> running without an HTTP context).</p>
+</section>
+
+<!-- ═══════════════════════════ SQL ═══════════════════════════ -->
+<section id="sql-intro">
+<h2>SQL Layer — TemplateMs.Sql</h2>
+<p>A dedicated project with zero NuGet packages and zero project references. Its sole purpose: house all SQL strings as <code>public const string</code> on <code>public static</code> classes. <strong>No logic. No execution. No DI.</strong></p>
+</section>
+
+<section id="sql-constants">
+<h3>SQL Constants — explicit, reviewable SQL</h3>
+<pre><code><span class="k">namespace</span> <span class="t">TemplateMs.Sql.Features.Order.Commands</span>;
+
+<span class="k">public static class</span> <span class="t">OrderCommandSql</span>
+{
+    <span class="c">/// Inserts a new order and returns the DB-assigned identity.</span>
+    <span class="k">public const string</span> Insert = <span class="s">"""
+        INSERT INTO Orders (CustomerName, OrderDate, IsActive, CreatedBy, CreatedAt, UpdatedBy, UpdatedAt)
+        OUTPUT INSERTED.Id
+        VALUES (@CustomerName, @OrderDate, @IsActive, @CreatedBy, @CreatedAt, @UpdatedBy, @UpdatedAt);
+        """</span>;
+
+    <span class="k">public const string</span> UpdateStatus = <span class="s">"""
+        UPDATE Orders
+        SET    IsActive  = @IsActive,
+               UpdatedBy = @UpdatedBy,
+               UpdatedAt = @UpdatedAt
+        WHERE  Id        = @Id;
+        """</span>;
+}</code></pre>
+
+<pre><code><span class="k">public static class</span> <span class="t">OrderQuerySql</span>
+{
+    <span class="c">// Single round-trip returns 3 result grids:</span>
+    <span class="c">//   Grid 1: Order row</span>
+    <span class="c">//   Grid 2: all OrderItems for this order</span>
+    <span class="c">//   Grid 3: all OrderItemAttributes for all items</span>
+    <span class="k">public const string</span> GetById = <span class="s">"""
+        SELECT o.Id, o.CustomerName, o.OrderDate, o.IsActive,
+               o.CreatedBy, o.CreatedAt, o.UpdatedBy, o.UpdatedAt
+        FROM   Orders o
+        WHERE  o.Id = @Id;
+
+        SELECT i.Id, i.OrderId, i.ProductName, i.Quantity, i.UnitPrice, i.IsActive,
+               i.CreatedBy, i.CreatedAt, i.UpdatedBy, i.UpdatedAt
+        FROM   OrderItems i
+        WHERE  i.OrderId = @Id;
+
+        SELECT a.Id, a.OrderItemId, a.AttributeName, a.AttributeValue, a.IsActive,
+               a.CreatedBy, a.CreatedAt, a.UpdatedBy, a.UpdatedAt
+        FROM   OrderItemAttributes a
+        INNER JOIN OrderItems i ON i.Id = a.OrderItemId
+        WHERE  i.OrderId = @Id;
+        """</span>;
+}</code></pre>
+</section>
+
+<section id="sql-analyzers">
+<h3>Roslyn Analyzers — compile-time SQL guardrails</h3>
+<p>Two analyzers run on every build of <code>TemplateMs.Sql</code>:</p>
+<div class="table-wrap">
+<table>
+  <tr><th>Diagnostic</th><th>Severity</th><th>Fires when</th><th>Example offender</th></tr>
+  <tr><td><code>TMSSQL001</code></td><td>Error</td><td>3-part name (db.schema.table) in <code>const string</code> SQL after DML keyword</td><td><code>"SELECT * FROM MyDb.dbo.Orders"</code></td></tr>
+  <tr><td><code>TMSSQL002</code></td><td>Error</td><td>2-part name (schema.table) in <code>const string</code> SQL after DML keyword</td><td><code>"SELECT * FROM dbo.Orders"</code></td></tr>
+</table>
+</div>
+<p>Both analyzers detect bracket-quoted (<code>[dbo].[Orders]</code>), plain (<code>dbo.Orders</code>), and mixed forms. Column aliases like <code>o.Id</code> in a SELECT list are <strong>not</strong> flagged — the regex only matches immediately after DML keywords (<code>FROM</code>, <code>INTO</code>, <code>UPDATE</code>, <code>JOIN</code>, etc.).</p>
+<pre><code><span class="c">// TMSSQL001 fires on this — build ERROR:</span>
+<span class="k">public const string</span> Bad = <span class="s">"SELECT * FROM MyDb.dbo.Orders WHERE Id = @Id"</span>;
+
+<span class="c">// TMSSQL002 fires on this — build ERROR:</span>
+<span class="k">public const string</span> Bad2 = <span class="s">"SELECT * FROM dbo.Orders WHERE Id = @Id"</span>;
+
+<span class="c">// Clean — table name only, no schema/db prefix:</span>
+<span class="k">public const string</span> Good = <span class="s">"SELECT * FROM Orders WHERE Id = @Id"</span>;</code></pre>
+<p>The analyzer project targets <code>netstandard2.0</code> and is wired into <code>TemplateMs.Sql.csproj</code> as:</p>
+<pre><code><span class="k">&lt;ProjectReference</span> Include=<span class="s">"..\TemplateMs.Sql.Analyzers\TemplateMs.Sql.Analyzers.csproj"</span>
+                  <span class="a">OutputItemType</span>=<span class="s">"Analyzer"</span>
+                  <span class="a">ReferenceOutputAssembly</span>=<span class="s">"false"</span> <span class="k">/&gt;</span></code></pre>
+</section>
+
+<!-- ═══════════════════════════ API ═══════════════════════════ -->
+<section id="api-intro">
+<h2>API Layer — TemplateMs.Api</h2>
+<p>The presentation ring. ASP.NET Core 10. References Application and Domain directly. References Infrastructure <strong>only through DI extension methods</strong> — no concrete Infrastructure type is used in a controller, middleware, or business method.</p>
+</section>
+
+<section id="program">
+<h3>Program.cs — bootstrap order matters</h3>
+<pre><code><span class="k">var</span> builder = <span class="t">WebApplication</span>.<span class="m">CreateBuilder</span>(args);
+
+builder.Services.<span class="m">AddControllers</span>();
+builder.Services.<span class="m">AddOpenApi</span>();
+builder.Services.<span class="m">AddExceptionHandler</span>&lt;<span class="t">GlobalExceptionFilter</span>&gt;();
+builder.Services.<span class="m">AddProblemDetails</span>();
+
+<span class="c">// 1. Infrastructure — repos, UoW, AMQ, background services</span>
+builder.Services.<span class="m">AddInfrastructure</span>(builder.Configuration);
+
+<span class="c">// 2. Application — FluentValidation validators, IDateTimeProvider</span>
+builder.Services.<span class="m">AddApplication</span>(builder.Configuration);
+
+<span class="c">// 3. MessageBus — ActiveMqConfiguration binding</span>
+builder.Services.<span class="m">AddMessageBusServices</span>(builder.Configuration);
+
+<span class="c">// 4. Wolverine — must come last (it wraps the host)</span>
+builder.<span class="m">AddWolverineMessaging</span>();
+
+<span class="k">var</span> app = builder.<span class="m">Build</span>();
+
+<span class="c">// Middleware pipeline order is significant:</span>
+app.<span class="m">UseMiddleware</span>&lt;<span class="t">CorrelationIdMiddleware</span>&gt;();  <span class="c">// reads/generates X-Correlation-Id first</span>
+app.<span class="m">UseExceptionHandler</span>();                        <span class="c">// catches all unhandled exceptions</span>
+app.<span class="m">UseHttpsRedirection</span>();
+app.<span class="m">UseAuthorization</span>();
+app.<span class="m">MapControllers</span>();
+
+<span class="c">// Scalar API documentation at /scalar/v1</span>
+app.<span class="m">MapOpenApi</span>();
+app.<span class="m">MapScalarApiReference</span>(opts => {
+    opts.Title = <span class="s">"TemplateMs API"</span>;
+    opts.Theme = <span class="t">ScalarTheme</span>.Purple;
+});
+
+app.<span class="m">Run</span>();</code></pre>
+</section>
+
+<section id="controllers">
+<h3>Controllers — thin, no business logic</h3>
+<pre><code><span class="a">[ApiController]</span>
+<span class="a">[Route("api/orders")]</span>
+<span class="k">public sealed class</span> <span class="t">OrderController</span> : <span class="t">ControllerBase</span>
+{
+    <span class="k">private readonly</span> <span class="t">IMessageBus</span> _bus;   <span class="c">// WolverineFX — dispatches commands/queries</span>
+    <span class="k">public</span> <span class="t">OrderController</span>(<span class="t">IMessageBus</span> bus) => _bus = bus;
+
+    <span class="a">[HttpPost]</span>
+    <span class="a">[ProducesResponseType(typeof(OrderResponse), StatusCodes.Status201Created)]</span>
+    <span class="k">public async</span> <span class="t">Task</span>&lt;<span class="t">IActionResult</span>&gt; <span class="m">Create</span>(
+        <span class="a">[FromBody]</span> <span class="t">CreateOrderRequest</span> request, <span class="t">CancellationToken</span> ct)
+    {
+        <span class="c">// Map HTTP request → command (no business logic here)</span>
+        <span class="k">var</span> command = <span class="k">new</span> <span class="t">CreateOrderCommand</span>(request.CustomerName, request.OrderDate, <span class="c">/* items */</span>...);
+
+        <span class="c">// Dispatch to Wolverine — triggers middleware pipeline → handler</span>
+        <span class="k">var</span> dto = <span class="k">await</span> _bus.<span class="m">InvokeAsync</span>&lt;<span class="t">OrderDto</span>&gt;(command, ct);
+
+        <span class="c">// Map Application DTO → HTTP response model</span>
+        <span class="k">var</span> response = <span class="t">OrderResponse</span>.<span class="m">FromDto</span>(dto!);
+        <span class="k">return</span> <span class="m">CreatedAtAction</span>(<span class="k">nameof</span>(<span class="m">GetById</span>), <span class="k">new</span> { id = response.Id }, response);
+    }
+}</code></pre>
+<p>The controller knows nothing about repositories, the unit of work, or SQL. It only knows about the message bus and the Application layer's commands/queries. The DI container + Wolverine handle everything else.</p>
+</section>
+
+<section id="middleware">
+<h3>Middleware</h3>
+<h4>CorrelationIdMiddleware</h4>
+<pre><code><span class="k">public async</span> <span class="t">Task</span> <span class="m">InvokeAsync</span>(<span class="t">HttpContext</span> context)
+{
+    <span class="c">// Read from incoming header, or generate a new GUID</span>
+    <span class="k">var</span> correlationId = context.Request.Headers[<span class="s">"X-Correlation-Id"</span>].<span class="m">FirstOrDefault</span>()
+                        ?? <span class="t">Guid</span>.<span class="m">NewGuid</span>().<span class="m">ToString</span>();
+
+    <span class="c">// Store in HttpContext so GlobalExceptionFilter and other middleware can read it</span>
+    context.Items[<span class="s">"CorrelationId"</span>] = correlationId;
+
+    <span class="c">// Echo back to the client on every response</span>
+    context.Response.Headers[<span class="s">"X-Correlation-Id"</span>] = correlationId;
+
+    <span class="k">await</span> _next(context);
+}</code></pre>
+</section>
+
+<section id="di">
+<h3>DI Extension Methods — the composition root</h3>
+<pre><code><span class="c">// All Infrastructure DI in one place — Api only imports this method, not concrete types</span>
+<span class="k">public static</span> <span class="t">IServiceCollection</span> <span class="m">AddInfrastructure</span>(<span class="k">this</span> <span class="t">IServiceCollection</span> services, <span class="t">IConfiguration</span> config)
+{
+    services.<span class="m">Configure</span>&lt;<span class="t">InfrastructureOptions</span>&gt;(config.<span class="m">GetSection</span>(<span class="s">"Infrastructure"</span>));
+    services.<span class="m">Configure</span>&lt;<span class="t">ActiveMqConfiguration</span>&gt;(config.<span class="m">GetSection</span>(<span class="s">"ActiveMQ"</span>));
+
+    services.<span class="m">AddSingleton</span>&lt;<span class="i">ICommandDbConnectionFactory</span>, <span class="t">CommandDbConnectionFactory</span>&gt;();
+    services.<span class="m">AddSingleton</span>&lt;<span class="i">IQueryDbConnectionFactory</span>,  <span class="t">QueryDbConnectionFactory</span>&gt;();
+
+    services.<span class="m">AddScoped</span>&lt;<span class="t">DapperUnitOfWork</span>&gt;();               <span class="c">// concrete — needed by write repos</span>
+    services.<span class="m">AddScoped</span>&lt;<span class="i">IUnitOfWork</span>&gt;(sp => sp.<span class="m">GetRequiredService</span>&lt;<span class="t">DapperUnitOfWork</span>&gt;());
+
+    services.<span class="m">AddScoped</span>&lt;<span class="i">IDomainEventDispatcher</span>, <span class="t">WolverineEventForwarders</span>&gt;();
+    services.<span class="m">AddHttpContextAccessor</span>();
+    services.<span class="m">AddScoped</span>&lt;<span class="i">ICurrentUserProvider</span>, <span class="t">CurrentUserProvider</span>&gt;();
+
+    services.<span class="m">AddScoped</span>&lt;<span class="i">IOrderWriteRepository</span>,                  <span class="t">OrderWriteRepository</span>&gt;();
+    services.<span class="m">AddScoped</span>&lt;<span class="i">IOrderReadRepository</span>,                   <span class="t">OrderReadRepository</span>&gt;();
+    services.<span class="m">AddScoped</span>&lt;<span class="i">IOrderItemWriteRepository</span>,              <span class="t">OrderItemWriteRepository</span>&gt;();
+    services.<span class="m">AddScoped</span>&lt;<span class="i">IOrderItemAttributeWriteRepository</span>,     <span class="t">OrderItemAttributeWriteRepository</span>&gt;();
+
+    services.<span class="m">AddSingleton</span>&lt;<span class="i">IMessageBusPublisher</span>, <span class="t">ActiveMqPublisher</span>&gt;();
+    services.<span class="m">AddScoped</span>&lt;<span class="t">OutboxStorage</span>&gt;();
+
+    services.<span class="m">AddHostedService</span>&lt;<span class="t">OutboxProcessor</span>&gt;();
+    services.<span class="m">AddHostedService</span>&lt;<span class="t">InboxProcessor</span>&gt;();
+    services.<span class="m">AddHostedService</span>&lt;<span class="t">ActiveMqConsumer</span>&gt;();
+
+    <span class="t">DapperTypeMappings</span>.<span class="m">Configure</span>();   <span class="c">// MatchNamesWithUnderscores = true</span>
+    <span class="k">return</span> services;
+}</code></pre>
+</section>
+
+<section id="error-handling">
+<h3>Error Handling — GlobalExceptionFilter</h3>
+<pre><code><span class="k">public sealed class</span> <span class="t">GlobalExceptionFilter</span> : <span class="i">IExceptionHandler</span>
+{
+    <span class="k">public async</span> <span class="t">ValueTask</span>&lt;<span class="k">bool</span>&gt; <span class="m">TryHandleAsync</span>(<span class="t">HttpContext</span> ctx, <span class="t">Exception</span> ex, <span class="t">CancellationToken</span> ct)
+    {
+        <span class="k">var</span> correlationId = ctx.Items[<span class="s">"CorrelationId"</span>]?.ToString() ?? <span class="s">""</span>;
+        _logger.<span class="m">LogError</span>(ex, <span class="s">"CorrelationId={CorrelationId}"</span>, correlationId);
+
+        <span class="k">var</span> (status, title, _) = ex <span class="k">switch</span>
+        {
+            <span class="t">ValidationException</span>   => (<span class="m">400</span>, <span class="s">"Validation Failure"</span>,     ...),
+            <span class="t">OrderNotFoundException</span> => (<span class="m">404</span>, <span class="s">"Resource Not Found"</span>,     ...),
+            <span class="t">DomainException</span>       => (<span class="m">422</span>, <span class="s">"Business Rule Violation"</span>, ...),
+            _                       => (<span class="m">500</span>, <span class="s">"Internal Server Error"</span>,  ...)
+        };
+
+        <span class="k">var</span> problem = <span class="k">new</span> <span class="t">ProblemDetails</span> { Status=status, Title=title, Detail=ex.Message };
+        problem.Extensions[<span class="s">"correlationId"</span>] = correlationId;
+        <span class="k">if</span> (ex <span class="k">is</span> <span class="t">ValidationException</span> ve)
+            problem.Extensions[<span class="s">"errors"</span>] = ve.Errors;
+
+        ctx.Response.StatusCode = status;
+        <span class="k">await</span> ctx.Response.<span class="m">WriteAsJsonAsync</span>(problem, ct);
+        <span class="k">return true</span>;   <span class="c">// handled — don't pass to next handler</span>
+    }
+}</code></pre>
+</section>
+
+<section id="api-models">
+<h3>Request / Response Models — separate from DTOs</h3>
+<pre><code><span class="c">// Request model — what the HTTP client sends</span>
+<span class="k">public sealed record</span> <span class="t">CreateOrderRequest</span>(
+    <span class="k">string</span>   CustomerName,
+    <span class="t">DateTime</span> OrderDate,
+    <span class="t">IReadOnlyList</span>&lt;<span class="t">CreateOrderItemRequest</span>&gt;? Items);
+
+<span class="c">// Response model — what the HTTP client receives</span>
+<span class="c">// Separately defined so the HTTP contract can evolve independently of the Application DTO</span>
+<span class="k">public sealed record</span> <span class="t">OrderResponse</span>(
+    <span class="k">int</span>      Id,
+    <span class="k">string</span>   CustomerName,
+    <span class="t">DateTime</span> OrderDate,
+    <span class="k">bool</span>     IsActive,
+    <span class="t">IReadOnlyList</span>&lt;<span class="t">OrderItemResponse</span>&gt; Items,
+    <span class="t">DateTime</span> CreatedAt,
+    <span class="t">DateTime</span> UpdatedAt,
+    <span class="t">Guid</span>     CreatedBy,
+    <span class="t">Guid</span>     UpdatedBy)
+{
+    <span class="c">// Static factory — maps Application DTO → HTTP response</span>
+    <span class="k">public static</span> <span class="t">OrderResponse</span> <span class="m">FromDto</span>(<span class="t">OrderDto</span> dto) => <span class="k">new</span>(...);
+}</code></pre>
+</section>
+
+<!-- ═══════════════════════════ FULL FLOWS ═══════════════════════════ -->
+<section id="flow-create">
+<h2>Full Flow: Create Order End-to-End</h2>
+<ol class="steps">
+  <li><div class="step-body"><span class="step-title">HTTP Request arrives</span><p><code>POST /api/orders</code> with JSON body. <code>CorrelationIdMiddleware</code> runs first — reads or generates <code>X-Correlation-Id</code> and stores it in <code>HttpContext.Items</code>.</p></div></li>
+  <li><div class="step-body"><span class="step-title">Controller maps to command</span><p><code>OrderController.Create</code> deserialises <code>CreateOrderRequest</code> → builds <code>CreateOrderCommand</code> (sealed record). Calls <code>IMessageBus.InvokeAsync&lt;OrderDto&gt;(command)</code>.</p></div></li>
+  <li><div class="step-body"><span class="step-title">Wolverine middleware — Logging</span><p><code>LoggingBehavior.Before</code> logs <code>"Handling CreateOrderCommand id=..."</code></p></div></li>
+  <li><div class="step-body"><span class="step-title">Wolverine middleware — Validation</span><p><code>ValidationBehavior.ExecuteAsync</code> calls <code>CreateOrderCommandValidator.ValidateAsync</code>. If validation fails → throws <code>ValidationException</code> → caught by <code>GlobalExceptionFilter</code> → returns HTTP 400.</p></div></li>
+  <li><div class="step-body"><span class="step-title">Handler executes</span><p><code>CreateOrderCommandHandler.Handle</code>: calls <code>Order.Create()</code>, registers aggregate, calls <code>OrderWriteRepository.AddAsync()</code> (Dapper INSERT + <code>OUTPUT INSERTED.Id</code>), iterates items and attributes, builds the aggregate in memory.</p></div></li>
+  <li><div class="step-body"><span class="step-title">UoW CommitAsync</span><p><code>DapperUnitOfWork.CommitAsync()</code>: calls <code>Transaction.Commit()</code> — all INSERTs are atomically durable. Then calls <code>IDomainEventDispatcher.DispatchAsync(trackedAggregates)</code>.</p></div></li>
+  <li><div class="step-body"><span class="step-title">Domain event dispatch</span><p><code>WolverineEventForwarders.DispatchAsync</code> calls <code>IMessageBus.PublishAsync(OrderCreatedEvent)</code>. Wolverine routes this to <code>OrderDomainEventHandler</code>.</p></div></li>
+  <li><div class="step-body"><span class="step-title">Domain event handler → outbox</span><p><code>OrderDomainEventHandler.Handle</code> builds <code>OrderCreatedIntegrationEvent</code>, serialises to JSON, calls <code>IUnitOfWork.QueueOutboxMessageAsync</code> (INSERT into OutboxMessages), then calls <code>CommitAsync</code> again (commits this second transaction).</p></div></li>
+  <li><div class="step-body"><span class="step-title">Controller returns HTTP 201</span><p>Handler returns <code>OrderDto</code>. Controller maps via <code>OrderResponse.FromDto(dto)</code>. Returns <code>CreatedAtAction</code> — HTTP 201 with <code>Location: /api/orders/42</code> and JSON body.</p></div></li>
+  <li><div class="step-body"><span class="step-title">OutboxProcessor (async, background)</span><p>Polls every 5s. Reads unprocessed rows. Calls <code>ActiveMqPublisher.PublishAsync(OutboxEnvelope)</code> → ActiveMQ <code>order.events</code> queue. Marks row as processed.</p></div></li>
+</ol>
+</section>
+
+<section id="flow-event">
+<h2>Full Flow: Domain Event → Integration Event</h2>
+<div class="flow">
+<span class="hi">Order.Create() / AddItem() / etc.</span>
+  <span class="hi">└── AddDomainEvent(OrderCreatedEvent)</span>  ← stored in _domainEvents list
+
+<span class="hi2">DapperUnitOfWork.CommitAsync()</span>
+  <span class="hi2">├── Transaction.Commit()</span>               ← all SQL writes are now durable
+  <span class="hi2">└── IDomainEventDispatcher.DispatchAsync([order])</span>
+
+<span class="hi3">WolverineEventForwarders.DispatchAsync</span>
+  <span class="hi3">└── IMessageBus.PublishAsync(OrderCreatedEvent)</span>  ← re-enters Wolverine
+                                                          (in-process, same thread)
+
+<span class="hi4">Wolverine routes → OrderDomainEventHandler.Handle(OrderCreatedEvent)</span>
+  <span class="hi4">├── builds OrderCreatedIntegrationEvent { OrderId, CustomerName, ... }</span>
+  <span class="hi4">├── JsonSerializer.Serialize(integrationEvent) → JSON string</span>
+  <span class="hi4">├── IUnitOfWork.QueueOutboxMessageAsync("...IntegrationEvent", json)</span>
+  <span class="hi4">│     └── INSERT INTO OutboxMessages (inside new transaction)</span>
+  <span class="hi4">└── IUnitOfWork.CommitAsync()  ← commits the outbox INSERT</span>
+
+<span class="hi">OutboxProcessor.ExecuteAsync() — runs every 5 000ms</span>
+  <span class="hi">├── OutboxStorage.GetUnprocessedAsync()</span>
+  <span class="hi">│     └── SELECT TOP 50 WHERE ProcessedAt IS NULL ORDER BY CreatedAt</span>
+  <span class="hi">├── foreach record:</span>
+  <span class="hi">│     ├── ActiveMqPublisher.PublishAsync(new OutboxEnvelope(...))</span>
+  <span class="hi">│     │     ├── ConnectionFactory(BrokerUrl).CreateConnection()</span>
+  <span class="hi">│     │     ├── session.CreateProducer(queue)</span>
+  <span class="hi">│     │     └── producer.Send(TextMessage(json))</span>
+  <span class="hi">│     └── OutboxStorage.MarkProcessedAsync(record.Id)</span>
+  <span class="hi">└── Task.Delay(5000ms)</span>
+</div>
+</section>
+
+<section id="flow-query">
+<h2>Full Flow: Query an Order</h2>
+<div class="flow">
+<span class="hi">GET /api/orders/42</span>
+
+<span class="hi2">OrderController.GetById(id: 42)</span>
+  <span class="hi2">└── IMessageBus.InvokeAsync&lt;OrderDto&gt;(new GetOrderQuery(42))</span>
+
+<span class="hi3">Wolverine routes → GetOrderQueryHandler.Handle(GetOrderQuery)</span>
+  <span class="hi3">└── IOrderReadRepository.GetByIdAsync(42)</span>
+
+<span class="hi4">OrderReadRepository.GetByIdAsync(42)</span>
+  <span class="hi4">├── IQueryDbConnectionFactory.CreateConnection()  ← READ database</span>
+  <span class="hi4">├── conn.QueryMultipleAsync(OrderQuerySql.GetById, { Id = 42 })</span>
+  <span class="hi4">│     Grid 1: Order row</span>
+  <span class="hi4">│     Grid 2: OrderItem rows  (WHERE OrderId = 42)</span>
+  <span class="hi4">│     Grid 3: OrderItemAttribute rows (JOIN to items WHERE OrderId = 42)</span>
+  <span class="hi4">└── maps rows → OrderDto → OrderItemDto[] → OrderItemAttributeDto[]</span>
+
+<span class="hi">Handler returns OrderDto</span>
+  <span class="hi">└── if null → throws OrderNotFoundException → GlobalExceptionFilter → HTTP 404</span>
+
+<span class="hi2">OrderController wraps in OrderResponse.FromDto(dto)</span>
+  <span class="hi2">└── HTTP 200 OK with JSON body</span>
+</div>
+</section>
+
+<section id="flow-error">
+<h2>Full Flow: Error Handling</h2>
+<div class="flow">
+<span class="hi">Any unhandled exception propagates up to:</span>
+
+<span class="hi2">GlobalExceptionFilter.TryHandleAsync(httpContext, exception)</span>
+  <span class="hi2">├── reads correlationId from HttpContext.Items["CorrelationId"]</span>
+  <span class="hi2">├── logs: logger.LogError(ex, "CorrelationId={id}")</span>
+  <span class="hi2">├── pattern-matches exception type:</span>
+  <span class="hi2">│     ValidationException   → 400  "Validation Failure"</span>
+  <span class="hi2">│     OrderNotFoundException → 404  "Resource Not Found"</span>
+  <span class="hi2">│     DomainException       → 422  "Business Rule Violation"</span>
+  <span class="hi2">│     *                     → 500  "Internal Server Error"</span>
+  <span class="hi2">└── WriteAsJsonAsync(ProblemDetails)</span>
+
+<span class="hi3">Response body (RFC 7807):</span>
+<span class="hi3">{</span>
+<span class="hi3">  "title":         "Validation Failure",</span>
+<span class="hi3">  "status":        400,</span>
+<span class="hi3">  "detail":        "One or more validation failures occurred.",</span>
+<span class="hi3">  "correlationId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",</span>
+<span class="hi3">  "errors": {</span>
+<span class="hi3">    "CustomerName": ["CustomerName is required."]</span>
+<span class="hi3">  }</span>
+<span class="hi3">}</span>
+</div>
+</section>
+
+<!-- ═══════════════════════════ TESTS ═══════════════════════════ -->
+<section id="test-overview">
+<h2>Test Strategy</h2>
+<div class="card-grid">
+  <div class="card"><h4>Domain Tests</h4><p>Zero infrastructure. Zero mocks. Pure in-memory C#. Tests aggregate invariants, event raising, exception throwing. The fastest tests in the suite.</p></div>
+  <div class="card"><h4>Application Tests</h4><p>Mock Application interfaces (IOrderWriteRepository, IUnitOfWork, etc.) via NSubstitute. Test handler happy paths, failure paths, validator accept/reject cases.</p></div>
+  <div class="card"><h4>Infrastructure Tests</h4><p>Unit tests for Infrastructure-specific logic. No container required.</p></div>
+  <div class="card"><h4>API Tests</h4><p>Test controllers return correct status codes, middleware sets headers, error middleware maps exceptions.</p></div>
+  <div class="card"><h4>Architecture Tests</h4><p>63 NetArchTest rules enforcing dependency directions, naming conventions, forbidden libraries, vertical slice co-location.</p></div>
+  <div class="card"><h4>Integration Tests</h4><p>Real SQL Server via Testcontainers. One shared container per test run. Tests SQL INSERT/SELECT/UPDATE round-trips and the transactional outbox.</p></div>
+</div>
+
+<h3>Test naming and pattern</h3>
+<pre><code><span class="c">// PascalCase only — no underscores</span>
+<span class="a">[Fact]</span>
+<span class="k">public async</span> <span class="t">Task</span> <span class="m">InsertOrder_WithValidData_SuccessfullyPersists</span>()
+{
+    <span class="c">// Arrange</span>
+    <span class="k">using var</span> connection = <span class="k">new</span> <span class="t">SqlConnection</span>(ConnectionString);
+
+    <span class="c">// Act</span>
+    <span class="k">var</span> dbOrderId = <span class="k">await</span> connection.<span class="m">ExecuteScalarAsync</span>&lt;<span class="k">int</span>&gt;(<span class="t">OrderCommandSql</span>.Insert, <span class="k">new</span> { ... });
+
+    <span class="c">// Assert</span>
+    dbOrderId.<span class="m">Should</span>().<span class="m">BeGreaterThan</span>(0);
+}</code></pre>
+</section>
+
+<section id="arch-tests">
+<h3>Architecture Tests — examples from CleanArchitectureTests</h3>
+<pre><code><span class="a">[Fact]</span>
+<span class="k">public void</span> <span class="m">DomainDoesNotDependOnApplication</span>()
+{
+    <span class="k">var</span> result = <span class="t">Types</span>.<span class="m">InAssembly</span>(<span class="t">AssemblyReferences</span>.Domain)
+        .<span class="m">ShouldNot</span>().<span class="m">HaveDependencyOn</span>(<span class="s">"TemplateMs.Application"</span>).<span class="m">GetResult</span>();
+
+    result.IsSuccessful.<span class="m">Should</span>().<span class="m">BeTrue</span>(
+        <span class="s">"Domain is the innermost ring and must not reference Application"</span>);
+}
+
+<span class="a">[Fact]</span>
+<span class="k">public void</span> <span class="m">InfrastructureDoesNotDependOnApi</span>()
+{
+    <span class="k">var</span> result = <span class="t">Types</span>.<span class="m">InAssembly</span>(<span class="t">AssemblyReferences</span>.Infrastructure)
+        .<span class="m">ShouldNot</span>().<span class="m">HaveDependencyOn</span>(<span class="s">"TemplateMs.Api"</span>).<span class="m">GetResult</span>();
+
+    result.IsSuccessful.<span class="m">Should</span>().<span class="m">BeTrue</span>(
+        <span class="s">"Infrastructure must not reference the presentation layer"</span>);
+}</code></pre>
+
+<div class="callout warn">
+  <div class="callout-icon">⚠️</div>
+  <p>NetArchTest scans string literals in the IL, not just type references. The string <code>"TemplateMs.Api"</code> in a constant inside Infrastructure would trip the second test. This is why <code>TelemetryConfiguration.ServiceName = "TemplateMs"</code> (not <code>"TemplateMs.Api"</code>).</p>
+</div>
+</section>
+
+<section id="analyzer-tests">
+<h3>Analyzer Tests — in-process Roslyn compilation</h3>
+<pre><code><span class="k">public sealed class</span> <span class="t">HardCodedDatabaseNameAnalyzerTests</span>
+{
+    <span class="k">private readonly</span> <span class="t">HardCodedDatabaseNameAnalyzer</span> _sut = <span class="k">new</span>();
+
+    <span class="a">[Fact]</span>
+    <span class="k">public async</span> <span class="t">Task</span> <span class="m">Diagnostic_WhenConstStringContainsPlain3PartName</span>()
+    {
+        <span class="c">// Arrange</span>
+        <span class="k">const string</span> source = <span class="s">"""
+            namespace TestNs;
+            public static class Sql
+            {
+                public const string Query = "SELECT Id FROM MyDatabase.dbo.Orders WHERE Id = @Id;";
+            }
+            """</span>;
+
+        <span class="c">// Act</span>
+        <span class="k">var</span> diagnostics = <span class="k">await</span> <span class="t">AnalyzerTestHelper</span>.<span class="m">GetDiagnosticsAsync</span>(source, _sut);
+
+        <span class="c">// Assert</span>
+        diagnostics.<span class="m">Should</span>().<span class="m">ContainSingle</span>(d => d.Id == <span class="s">"TMSSQL001"</span>);
+    }
+}</code></pre>
+<p><code>AnalyzerTestHelper.GetDiagnosticsAsync</code> compiles the source snippet into a real <code>CSharpCompilation</code> in-process, attaches the analyzer via <code>WithAnalyzers</code>, and returns all reported diagnostics. No disk I/O, no subprocess — pure in-memory Roslyn.</p>
+</section>
+
+<section id="integration-tests">
+<h3>Integration Tests — shared container lifecycle</h3>
+<pre><code><span class="c">// SqlServerFixture.cs — IAsyncLifetime, starts ONE container for the entire collection</span>
+<span class="k">public sealed class</span> <span class="t">SqlServerFixture</span> : <span class="i">IAsyncLifetime</span>
+{
+    <span class="k">private readonly</span> <span class="t">MsSqlContainer</span> _container =
+        <span class="k">new</span> <span class="t">MsSqlBuilder</span>(<span class="s">"mcr.microsoft.com/mssql/server:2022-latest"</span>)
+            .<span class="m">WithPassword</span>(<span class="s">"IntegrationTest!1"</span>).<span class="m">Build</span>();
+
+    <span class="k">public string</span> ConnectionString => _container.<span class="m">GetConnectionString</span>();
+
+    <span class="k">public async</span> <span class="t">Task</span> <span class="m">InitializeAsync</span>()
+    {
+        <span class="k">await</span> _container.<span class="m">StartAsync</span>();           <span class="c">// start Docker container</span>
+        <span class="k">await</span> <span class="t">SchemaLoader</span>.<span class="m">ApplyAsync</span>(ConnectionString);  <span class="c">// apply DDL scripts</span>
+    }
+
+    <span class="k">public async</span> <span class="t">Task</span> <span class="m">DisposeAsync</span>() => <span class="k">await</span> _container.<span class="m">DisposeAsync</span>();
+}
+
+<span class="c">// IntegrationTestCollection.cs — binds fixture to collection name</span>
+<span class="a">[CollectionDefinition("SqlServer")]</span>
+<span class="k">public sealed class</span> <span class="t">IntegrationTestCollection</span> : <span class="i">ICollectionFixture</span>&lt;<span class="t">SqlServerFixture</span>&gt; {}
+
+<span class="c">// DatabaseIntegrationTests.cs — receives fixture via constructor injection</span>
+<span class="a">[Collection("SqlServer")]</span>
+<span class="k">public sealed class</span> <span class="t">DatabaseIntegrationTests</span>
+{
+    <span class="k">private readonly</span> <span class="t">SqlServerFixture</span> _fixture;
+    <span class="k">public</span> <span class="t">DatabaseIntegrationTests</span>(<span class="t">SqlServerFixture</span> fixture) => _fixture = fixture;
+
+    <span class="a">[Fact]</span>
+    <span class="k">public async</span> <span class="t">Task</span> <span class="m">InsertOrder_WithValidData_SuccessfullyPersists</span>()
+    {
+        <span class="c">// Arrange</span>
+        <span class="k">using var</span> connection = <span class="k">new</span> <span class="t">SqlConnection</span>(_fixture.ConnectionString);
+
+        <span class="c">// Act</span>
+        <span class="k">var</span> id = <span class="k">await</span> connection.<span class="m">ExecuteScalarAsync</span>&lt;<span class="k">int</span>&gt;(<span class="t">OrderCommandSql</span>.Insert, <span class="k">new</span> { ... });
+
+        <span class="c">// Assert</span>
+        id.<span class="m">Should</span>().<span class="m">BeGreaterThan</span>(0);
+    }
+}</code></pre>
+</section>
+
+<!-- ═══════════════════════════ REFERENCE ═══════════════════════════ -->
+<section id="config">
+<h2>Configuration Reference</h2>
+<pre><code>{
+  <span class="s">"Infrastructure"</span>: {
+    <span class="s">"CommandConnectionString"</span>: <span class="s">"Server=localhost;Database=TemplateMsDb;User Id=sa;Password=...;TrustServerCertificate=true;"</span>,
+    <span class="s">"QueryConnectionString"</span>:   <span class="s">"Server=localhost;Database=TemplateMsDb;User Id=sa;Password=...;TrustServerCertificate=true;Application Intent=ReadOnly;"</span>,
+    <span class="s">"OutboxBatchSize"</span>:         <span class="m">50</span>,      <span class="c">// records per OutboxProcessor polling cycle</span>
+    <span class="s">"OutboxPollingIntervalMs"</span>: <span class="m">5000</span>    <span class="c">// milliseconds between polling cycles</span>
+  },
+  <span class="s">"ActiveMQ"</span>: {
+    <span class="s">"BrokerUrl"</span>:        <span class="s">"activemq:tcp://localhost:61616"</span>,
+    <span class="s">"Username"</span>:         <span class="s">"admin"</span>,
+    <span class="s">"Password"</span>:         <span class="s">"adminPassword1!"</span>,
+    <span class="s">"OrderEventsQueue"</span>: <span class="s">"order.events"</span>
+  }
+}</code></pre>
+
+<p>Docker / Kubernetes environment variable overrides use <code>__</code> as section separator:</p>
+<div class="table-wrap">
+<table>
+  <tr><th>Variable</th><th>Overrides</th></tr>
+  <tr><td><code>Infrastructure__CommandConnectionString</code></td><td><code>Infrastructure.CommandConnectionString</code></td></tr>
+  <tr><td><code>Infrastructure__OutboxPollingIntervalMs</code></td><td><code>Infrastructure.OutboxPollingIntervalMs</code></td></tr>
+  <tr><td><code>ActiveMQ__BrokerUrl</code></td><td><code>ActiveMQ.BrokerUrl</code></td></tr>
+  <tr><td><code>ASPNETCORE_ENVIRONMENT</code></td><td>Selects <code>appsettings.{env}.json</code></td></tr>
+</table>
+</div>
+</section>
+
+<section id="database">
+<h2>Database Schema</h2>
+<pre><code><span class="k">CREATE TABLE</span> Orders (
+    Id           <span class="t">INT IDENTITY(1,1)</span>  <span class="k">PRIMARY KEY</span>,
+    CustomerName <span class="t">NVARCHAR(200)</span>      <span class="k">NOT NULL</span>,
+    OrderDate    <span class="t">DATETIME2</span>          <span class="k">NOT NULL</span>,
+    IsActive     <span class="t">BIT</span>                <span class="k">NOT NULL DEFAULT</span> 1,
+    CreatedBy    <span class="t">UNIQUEIDENTIFIER</span>   <span class="k">NOT NULL</span>,
+    CreatedAt    <span class="t">DATETIME2</span>          <span class="k">NOT NULL</span>,
+    UpdatedBy    <span class="t">UNIQUEIDENTIFIER</span>   <span class="k">NOT NULL</span>,
+    UpdatedAt    <span class="t">DATETIME2</span>          <span class="k">NOT NULL</span>
+);
+
+<span class="k">CREATE TABLE</span> OrderItems (
+    Id          <span class="t">INT IDENTITY(1,1)</span>  <span class="k">PRIMARY KEY</span>,
+    OrderId     <span class="t">INT</span>                <span class="k">NOT NULL REFERENCES</span> Orders(Id),
+    ProductName <span class="t">NVARCHAR(200)</span>      <span class="k">NOT NULL</span>,
+    Quantity    <span class="t">INT</span>                <span class="k">NOT NULL</span>,
+    UnitPrice   <span class="t">DECIMAL(18,2)</span>      <span class="k">NOT NULL</span>,
+    IsActive    <span class="t">BIT</span>                <span class="k">NOT NULL DEFAULT</span> 1,
+    CreatedBy   <span class="t">UNIQUEIDENTIFIER</span>   <span class="k">NOT NULL</span>,
+    CreatedAt   <span class="t">DATETIME2</span>          <span class="k">NOT NULL</span>,
+    UpdatedBy   <span class="t">UNIQUEIDENTIFIER</span>   <span class="k">NOT NULL</span>,
+    UpdatedAt   <span class="t">DATETIME2</span>          <span class="k">NOT NULL</span>
+);
+
+<span class="k">CREATE TABLE</span> OrderItemAttributes (
+    Id             <span class="t">INT IDENTITY(1,1)</span>  <span class="k">PRIMARY KEY</span>,
+    OrderItemId    <span class="t">INT</span>                <span class="k">NOT NULL REFERENCES</span> OrderItems(Id),
+    AttributeName  <span class="t">NVARCHAR(100)</span>      <span class="k">NOT NULL</span>,
+    AttributeValue <span class="t">NVARCHAR(500)</span>      <span class="k">NOT NULL</span>,
+    IsActive       <span class="t">BIT</span>                <span class="k">NOT NULL DEFAULT</span> 1,
+    CreatedBy      <span class="t">UNIQUEIDENTIFIER</span>   <span class="k">NOT NULL</span>,
+    CreatedAt      <span class="t">DATETIME2</span>          <span class="k">NOT NULL</span>,
+    UpdatedBy      <span class="t">UNIQUEIDENTIFIER</span>   <span class="k">NOT NULL</span>,
+    UpdatedAt      <span class="t">DATETIME2</span>          <span class="k">NOT NULL</span>
+);
+
+<span class="k">CREATE TABLE</span> OutboxMessages (
+    Id          <span class="t">UNIQUEIDENTIFIER</span> <span class="k">PRIMARY KEY</span>,
+    MessageType <span class="t">NVARCHAR(500)</span>    <span class="k">NOT NULL</span>,
+    Payload     <span class="t">NVARCHAR(MAX)</span>    <span class="k">NOT NULL</span>,
+    CreatedAt   <span class="t">DATETIME2</span>        <span class="k">NOT NULL</span>,
+    ProcessedAt <span class="t">DATETIME2</span>        <span class="k">NULL</span>,  <span class="c">-- NULL = pending</span>
+    Error       <span class="t">NVARCHAR(MAX)</span>    <span class="k">NULL</span>   <span class="c">-- NULL = no error yet</span>
+);</code></pre>
+</section>
+
+<section id="new-feature">
+<h2>Adding a New Feature Slice</h2>
+<p>Use <code>Product</code> as the example. Follow every step in this exact order.</p>
+<ol class="steps">
+  <li><div class="step-body"><span class="step-title">Domain entity</span><p>Create <code>src/core/TemplateMs.Domain/Entities/Product.cs</code> — <code>sealed class Product : BaseAuditableEntity</code> with factory method, private setters on business properties, business methods that throw <code>DomainException</code>.</p></div></li>
+  <li><div class="step-body"><span class="step-title">Domain event(s)</span><p>Create <code>Domain/Events/ProductCreatedEvent.cs</code> — <code>sealed record ProductCreatedEvent(...) : DomainEvent</code>. Call <code>AddDomainEvent</code> from inside the aggregate's business methods.</p></div></li>
+  <li><div class="step-body"><span class="step-title">Domain exception</span><p>Create <code>Domain/Exceptions/ProductNotFoundException.cs</code> — <code>sealed class ProductNotFoundException : DomainException</code>. Maps to HTTP 404 automatically via <code>GlobalExceptionFilter</code>.</p></div></li>
+  <li><div class="step-body"><span class="step-title">SQL constants</span><p>Create <code>Sql/Features/Product/Commands/ProductCommandSql.cs</code> and <code>Queries/ProductQuerySql.cs</code>. Write plain table names — no <code>dbo.</code> prefix (TMSSQL002 will fail the build).</p></div></li>
+  <li><div class="step-body"><span class="step-title">Application interfaces</span><p>Create <code>Application/Features/Product/Interfaces/IProductWriteRepository.cs</code> and <code>IProductReadRepository.cs</code>. These are Application's contract with Infrastructure.</p></div></li>
+  <li><div class="step-body"><span class="step-title">DTOs and mapper</span><p>Create <code>Application/Features/Product/Dtos/ProductDto.cs</code> (sealed record) and <code>Mapping/ProductMapper.cs</code> (static class, manual mapping).</p></div></li>
+  <li><div class="step-body"><span class="step-title">Command + handler + validator</span><p>Create <code>Application/Features/Product/Commands/CreateProductCommand.cs</code> (sealed record), <code>CreateProductCommandHandler.cs</code> (sealed class with <code>Handle</code> method), <code>CreateProductCommandValidator.cs</code> (<code>AbstractValidator&lt;CreateProductCommand&gt;</code>).</p></div></li>
+  <li><div class="step-body"><span class="step-title">Query + handler</span><p>Create <code>Application/Features/Product/Queries/GetProductQuery.cs</code> and <code>GetProductQueryHandler.cs</code>. Handler calls <code>IProductReadRepository.GetByIdAsync</code>.</p></div></li>
+  <li><div class="step-body"><span class="step-title">Domain event handler</span><p>Create <code>Application/Features/Product/Events/ProductCreatedDomainEventHandler.cs</code>. Handle <code>ProductCreatedEvent</code>: build integration event JSON, call <code>IUnitOfWork.QueueOutboxMessageAsync</code>.</p></div></li>
+  <li><div class="step-body"><span class="step-title">Infrastructure repositories</span><p>Create <code>Infrastructure/Repositories/ProductWriteRepository.cs</code> and <code>ProductReadRepository.cs</code>. Write repo injects <code>DapperUnitOfWork</code> directly (shares transaction). Read repo injects <code>IQueryDbConnectionFactory</code>.</p></div></li>
+  <li><div class="step-body"><span class="step-title">DI registration</span><p>Open <code>Api/DI/AddInfrastructureServices.cs</code>. Add: <code>services.AddScoped&lt;IProductWriteRepository, ProductWriteRepository&gt;()</code> and the read variant.</p></div></li>
+  <li><div class="step-body"><span class="step-title">API controller</span><p>Create <code>Api/Controllers/ProductController.cs</code>, <code>RequestModels/CreateProductRequest.cs</code>, <code>ResponseModels/ProductResponse.cs</code>. Controller injects only <code>IMessageBus</code>.</p></div></li>
+  <li><div class="step-body"><span class="step-title">Tests</span><p>Domain tests (invariants, events, exceptions), Application tests (handler happy/failure, validator), Integration tests (SQL round-trip). Architecture tests are automatically covered by existing rules.</p></div></li>
+</ol>
+</section>
+
+<section id="standards">
+<h2>Engineering Standards</h2>
+<div class="table-wrap">
+<table>
+  <tr><th>Standard</th><th>Enforcement mechanism</th></tr>
+  <tr><td>No inline SQL</td><td>Roslyn analyzers TMSSQL001, TMSSQL002 fail the build</td></tr>
+  <tr><td>No AutoMapper</td><td><code>ForbiddenLibrariesTests</code> in Architecture Tests</td></tr>
+  <tr><td>No MediatR</td><td><code>ForbiddenLibrariesTests</code> in Architecture Tests</td></tr>
+  <tr><td>Dependency ring directions</td><td><code>CleanArchitectureTests</code> — 11 rules</td></tr>
+  <tr><td>Warnings as errors</td><td><code>Directory.Build.props</code> — <code>TreatWarningsAsErrors=true</code></td></tr>
+  <tr><td>Nullable reference types</td><td><code>&lt;Nullable&gt;enable&lt;/Nullable&gt;</code> on all projects</td></tr>
+  <tr><td>Sealed classes</td><td><code>HandlerConventionTests</code> — handlers, validators must be sealed</td></tr>
+  <tr><td>Records for commands/queries/DTOs</td><td><code>HandlerConventionTests</code> — must be records</td></tr>
+  <tr><td>Vertical slice co-location</td><td><code>VerticalSliceTests</code> — handlers must reside in same namespace as their command/query</td></tr>
+  <tr><td>RFC 7807 error responses</td><td><code>GlobalExceptionFilter</code> — always returns <code>ProblemDetails</code> JSON</td></tr>
+  <tr><td>Correlation ID on every response</td><td><code>CorrelationIdMiddleware</code> — always writes <code>X-Correlation-Id</code> header</td></tr>
+  <tr><td>XML documentation</td><td><code>GenerateDocumentationFile=true</code> — all public members documented</td></tr>
+  <tr><td>AAA test pattern</td><td>Code review — <code>// Arrange</code>, <code>// Act</code>, <code>// Assert</code> comments required</td></tr>
+  <tr><td>PascalCase test names</td><td>Code review — no underscores</td></tr>
+  <tr><td>Single container per integration test run</td><td><code>SqlServerFixture</code> + <code>ICollectionFixture&lt;T&gt;</code> — no per-test Docker lifecycle</td></tr>
+  <tr><td><code>CancellationToken</code> everywhere</td><td>Code review — every async method must propagate</td></tr>
+  <tr><td>No <code>.Result</code> / <code>.Wait()</code></td><td>Code review — async all the way from controller to repository</td></tr>
+</table>
+</div>
+</section>
+
+</main>
+
+<script>
+// Active sidebar link tracking
+const sections = document.querySelectorAll('section[id]');
+const navLinks  = document.querySelectorAll('nav#sidebar a');
+
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      navLinks.forEach(link => {
+        link.classList.toggle('active', link.getAttribute('href') === '#' + entry.target.id);
+      });
+    }
+  });
+}, { rootMargin: '-20% 0px -70% 0px' });
+
+sections.forEach(s => observer.observe(s));
+</script>
+</body>
+</html>
